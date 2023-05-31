@@ -12,27 +12,26 @@ export default function PageHeader() {
     { "id": 2, "link": "/committee", "text": "Committee"},
     { "id": 3, "link": "/archive", "text": "Archive"}
   ]
-  // Feels hacky - check with James
-  // Better to structure app with header, then page below?
-  // Or do this
-  // Or use redux to have state outside of component?
   const location = useLocation();
   const page = links.filter((link) => link.link === location.pathname)[0].id;
   return (
-    <div className={"flex w-screen justify-center px-2 py-4 sm:px-0"}>
+    <div className={"flex w-screen justify-center items-center h-30 px-2 py-4 sm:px-0"}>
+      <NavLink to={"/"}>
+        <img className={"px-5 h-24"} src={"templogo.png"} alt={"society logo"} />
+      </NavLink>
       <Tab.Group selectedIndex={page} >
-        <Tab.List className={"w-1/2 flex justify-evenly rounded-xl bg-blue-900/20 p-1"}>
+        <Tab.List className={"w-1/2 max-h-12 flex justify-evenly items-center rounded-xl bg-green-900/20 p-1"}>
           {links.map((link) => (
             <NavLink to={link.link} className={"w-full"}>
               <Tab
                 key={link.id}
                 className={({ selected } ) =>
                   classNames(
-                    'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700',
-                    'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
+                    'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-green-700',
+                    'ring-white ring-opacity-60 ring-offset-2 ring-offset-green-600 focus:outline-none focus:ring-2',
                     selected
                       ? 'bg-white shadow'
-                      : 'text-blue-100 hover:bg-white/[0.12] hover:text-white'
+                      : 'text-green-600 hover:bg-white/[0.12] hover:text-green-800'
                   )
                 }
               >{link.text}
