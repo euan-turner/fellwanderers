@@ -15,19 +15,24 @@ export default function PageHeader() {
   const location = useLocation();
   const page = links.filter((link) => link.link === location.pathname)[0].id;
   return (
-    <div className={"flex w-screen justify-center items-center h-30 px-2 py-4 sm:px-0"}>
-      <NavLink to={"/"}>
-        <img className={"px-5 h-24"} src={"templogo.png"} alt={"society logo"} />
-      </NavLink>
+    <div className={"flex w-screen justify-around items-center h-30 px-2 py-4 sm:px-0"}>
+      <div className={"flex w-1/4 place-content-center"}>
+        <NavLink to={"/"}>
+          <img className={"px-5 h-24"} src={"templogo.png"} alt={"society logo"} />
+        </NavLink>
+        <h1 className={"mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl dark:text-white"}>
+          Fellwanderers
+        </h1>
+      </div>
       <Tab.Group selectedIndex={page} >
-        <Tab.List className={"w-1/2 max-h-12 flex justify-evenly items-center rounded-xl bg-green-900/20 p-1"}>
+        <Tab.List className={"max-h-12 w-1/4 flex justify-center items-center rounded-xl bg-green-900/20 p-1"}>
           {links.map((link) => (
             <NavLink to={link.link} className={"w-full"}>
               <Tab
                 key={link.id}
                 className={({ selected } ) =>
                   classNames(
-                    'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-green-700',
+                    'w-full rounded-md px-2.5 py-2.5 text-sm font-medium leading-5 text-green-700',
                     'ring-white ring-opacity-60 ring-offset-2 ring-offset-green-600 focus:outline-none focus:ring-2',
                     selected
                       ? 'bg-white shadow'
