@@ -20,7 +20,7 @@ export default function PageHeader() {
         <NavLink to={"/"}>
           <img className={"px-5 h-24"} src={"templogo.png"} alt={"society logo"} />
         </NavLink>
-        <h1 className={"mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl dark:text-white"}>
+        <h1 className={"mb-4 text-2xl place-self-center font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl"}>
           Fellwanderers
         </h1>
       </div>
