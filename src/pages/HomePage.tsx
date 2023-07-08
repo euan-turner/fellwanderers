@@ -1,5 +1,5 @@
 import { FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import { faPersonHiking } from "@fortawesome/free-solid-svg-icons";
+import { faPersonHiking, faBagShopping, faHashtag, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 import PageHeader from "../components/PageHeader";
 import TextImage from "../components/TextImage";
@@ -7,6 +7,9 @@ import StyledLink from "../components/StyledLink.tsx";
 
 export default function HomePage() {
   const socLink = "https://www.imperialcollegeunion.org/activities/a-to-z/fellwanderers";
+  const shopLink = "https://www.imperialcollegeunion.org/shop/student-groups/407";
+  const instaLink = "https://www.instagram.com/icfellwanderers";
+  const mailLink = "https://mailman.ic.ac.uk/mailman/listinfo/fellwanderers";
   const about: JSX.Element = (
     <div>
       <p>
@@ -25,25 +28,65 @@ export default function HomePage() {
           <div>
             <FontAwesomeIcon icon={faPersonHiking} /> Join Fellwanderers
           </div>
-        )}/>
+        )}
+      />
     </div>
   );
   // use bag-shopping font awesome
   const shop: JSX.Element = (
     <div>
-      <a href="https://www.imperialcollegeunion.org/shop/student-groups/407" target="_blank">Fellwanderers Shop</a>
+      <p>
+        Fancy a day away from London with us at the weekend? You'll need to head on over to our union shop to get a ticket.
+      </p>
+      <p>
+        Tour tickets and merch will be available as well once they're organised.
+      </p>
+      <StyledLink 
+        href={shopLink}  
+        className={"inline-block p-2 bg-green-900/50 font-semibold rounded-md no-underline hover:bg-green-900/60"}
+        children={(
+          <div>
+            <FontAwesomeIcon icon={faBagShopping} /> Union Shop
+          </div>
+        )}
+      />
     </div>
   );
   // use instagram font awesome
   const followUs: JSX.Element = (
     <div>
-      <a href="https://www.instagram.com/icfellwanderers/" target="_blank">Follow Us</a>
+      <p>
+        We'll be posting pictures from all our hikes in Instagram, so head on over there to get your nature fix.
+      </p>
+      <StyledLink
+        href={instaLink}
+        className={"inline-block p-2 bg-green-900/50 font-semibold rounded-md no-underline hover:bg-green-900/60"}
+        children={(
+          <div>
+            <FontAwesomeIcon icon={faHashtag} /> Instagram
+          </div>
+        )}
+      />
     </div>
   );
   // use envelope font awesome
   const mail: JSX.Element = (
     <div>
-      <a href="https://mailman.ic.ac.uk/mailman/listinfo/fellwanderers" target="_blank">Mailing List</a>
+      <p>
+        Sign up to our weekly mailing list to keep up to date with all things Fellwanderers.
+      </p>
+      <p>
+        We'll communicate all hikes, tours and other meet ups through here.
+      </p>
+      <StyledLink
+        href={mailLink}
+        className={"inline-block p-2 bg-green-900/50 font-semibold rounded-md no-underline hover:bg-green-900/60"}
+        children={(
+          <div>
+            <FontAwesomeIcon icon={faEnvelope} /> Mailing List
+          </div>
+        )}
+      />
     </div>
   );
   return (
