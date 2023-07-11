@@ -92,10 +92,10 @@ export default function HomePage() {
   return (
     <div>
       <PageHeader />
-      <TextImage title={"About"} content={about} src={"LakeDistrict22.jpg"} alt={"Lake District 2022"} textLeft={true} />
-      <TextImage title={"Fellwanderers Shop"} content={shop} src={"Snowdonia22.jpg"} alt={"Snowdonia 2022"} textLeft={false} />
-      <TextImage title={"Follow Us"} content={followUs} src={"Dales22.jpg"} alt={"Yorkshire Dales 2022"} textLeft={true} />
-      <TextImage title={"Mailing List"} content={mail} src={"JurassicCoast22.jpg"} alt={"Jurassic Coast 2022"} textLeft={false} />
+      <TextImage title={"About"} content={about} src={"hike_pics/LakeDistrict22.jpg"} alt={"Lake District 2022"} textLeft={true} />
+      <TextImage title={"Fellwanderers Shop"} content={shop} src={"hike_pics/Snowdonia22.jpg"} alt={"Snowdonia 2022"} textLeft={false} />
+      <TextImage title={"Follow Us"} content={followUs} src={"hike_pics/Dales22.jpg"} alt={"Yorkshire Dales 2022"} textLeft={true} />
+      <TextImage title={"Mailing List"} content={mail} src={"hike_pics/JurassicCoast22.jpg"} alt={"Jurassic Coast 2022"} textLeft={false} />
       
       {/*nice formatting: https://flowbite.com/docs/typography/links/*/}
       {/*use heroicons*/}
