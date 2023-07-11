@@ -16,11 +16,13 @@ export default function PageHeader() {
   const page = links.filter((link) => link.link === location.pathname)[0].id;
   return (
     <div className={"flex w-screen justify-around items-center h-30 px-2 py-4 sm:px-0"}>
-      <div className={"flex w-1/4 place-content-center"}>
+      <div className={"w-1/4"}>
         <NavLink to={"/"}>
-          <img className={"px-5 h-24"} src={"templogo.png"} alt={"society logo"} />
+          <img className={"px-5 h-24 object-center"} src={"templogo.png"} alt={"society logo"} />
         </NavLink>
-        <h1 className={"mb-4 text-2xl place-self-center font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl"}>
+      </div>
+      <div className={"w-1/4"}>
+        <h1 className={"mb-4 text-2xl text-center font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl"}>
           Fellwanderers
         </h1>
       </div>
