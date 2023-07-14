@@ -5,7 +5,8 @@ import PageHeader from "../components/PageHeader";
 import TextImage from "../components/TextImage";
 import StyledLink from "../components/StyledLink.tsx";
 
-const socLink = "https://www.imperialcollegeunion.org/activities/a-to-z/fellwanderers";
+// const socLink = "https://www.imperialcollegeunion.org/activities/a-to-z/fellwanderers";
+const joinLink = "https://www.imperialcollegeunion.org/shop/csp/fellwanderers/fellwanderers-imperial-hiking-society-membership-22-23";
 const shopLink = "https://www.imperialcollegeunion.org/shop/student-groups/407";
 const instaLink = "https://www.instagram.com/icfellwanderers";
 const mailLink = "https://mailman.ic.ac.uk/mailman/listinfo/fellwanderers";
@@ -21,7 +22,7 @@ const about: JSX.Element = (
       Then follow the link below to join us today!
     </p>
     <StyledLink
-      href={socLink}
+      href={joinLink}
       className={"inline-block p-2 bg-green-900/50 font-semibold rounded-md no-underline hover:bg-green-900/60"}
       children={(
         <div>
