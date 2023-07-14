@@ -1,5 +1,5 @@
 import { FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import { faPersonHiking, faBagShopping, faHashtag, faEnvelope, faArrowRight, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import { faPersonHiking, faHashtag, faEnvelope, faArrowRight, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 
 import PageHeader from "../components/PageHeader";
 import TextImage from "../components/TextImage";
@@ -7,51 +7,9 @@ import StyledLink from "../components/StyledLink.tsx";
 
 const socLink = "https://www.imperialcollegeunion.org/activities/a-to-z/fellwanderers";
 const joinLink = "https://www.imperialcollegeunion.org/shop/csp/fellwanderers/fellwanderers-imperial-hiking-society-membership-22-23";
-const shopLink = "https://www.imperialcollegeunion.org/shop/student-groups/407";
 const instaLink = "https://www.instagram.com/icfellwanderers";
 const mailLink = "https://mailman.ic.ac.uk/mailman/listinfo/fellwanderers";
 
-const about: JSX.Element = (
-  <div>
-    <p>
-      We are Fellwanderers, the hiking society of Imperial College London.
-      From single-day getaways to weekend trips and holiday tours, we have you covered for all your hiking needs
-      <br/>
-      Love the hiking in the outdoors? Want to escape London for a bit?
-      Or even just want to chat and eat in beautiful places?
-      Then follow the link below to join us today!
-    </p>
-    <StyledLink
-      href={joinLink}
-      className={"inline-block p-2 bg-green-900/50 font-semibold rounded-md no-underline hover:bg-green-900/60"}
-      children={(
-        <div>
-          <FontAwesomeIcon icon={faPersonHiking} /> Join Fellwanderers
-        </div>
-      )}
-    />
-  </div>
-);
-// use bag-shopping font awesome
-const shop: JSX.Element = (
-  <div>
-    <p>
-      Fancy a day away from London with us at the weekend? You'll need to head on over to our union shop to get a ticket.
-    </p>
-    <p>
-      Tour tickets and merch will be available as well once they're organised.
-    </p>
-    <StyledLink
-      href={shopLink}
-      className={"inline-block p-2 bg-green-900/50 font-semibold rounded-md no-underline hover:bg-green-900/60"}
-      children={(
-        <div>
-          <FontAwesomeIcon icon={faBagShopping} /> Union Shop
-        </div>
-      )}
-    />
-  </div>
-);
 // use instagram font awesome
 const followUs: JSX.Element = (
   <div>
@@ -91,20 +49,6 @@ const mail: JSX.Element = (
 );
 
 const sections = [
-  {
-    title: "About",
-    content: about,
-    src: "hike_pics/LakeDistrict22.jpg",
-    alt: "Lake District 2022",
-    textLeft: true
-  },
-  {
-    title: "Fellwanderers Shop",
-    content: shop,
-    src: "hike_pics/Snowdonia22.jpg",
-    alt: "Snowdonia 2022",
-    textLeft: false
-  },
   {
     title: "Follow Us",
     content: followUs,
