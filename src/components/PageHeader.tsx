@@ -18,7 +18,7 @@ export default function PageHeader() {
     <div className={"flex w-screen justify-around items-center h-30 px-2 py-4 sm:px-0"}>
       <div className={"w-1/4"}>
         <NavLink to={"/"}>
-          <img className={"px-5 h-24 object-center"} src={"templogo.png"} alt={"society logo"} />
+          <img className={"px-5 h-24 object-center"} src={"logo.png"} alt={"society logo"} />
         </NavLink>
       </div>
       <div className={"w-1/4"}>
