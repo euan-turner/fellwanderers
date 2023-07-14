@@ -15,7 +15,7 @@ export default function PageHeader() {
   const location = useLocation();
   const page = links.filter((link) => link.link === location.pathname)[0].id;
   return (
-    <div className={"flex justify-center items-center w-screen h-30 px-2 py-4 sm:px-0"}>
+    <div className={"shadow-md flex justify-center items-center w-screen h-30 px-2 py-4 mb-4 sm:px-0"}>
       <NavLink to={"/"} className={"w-1/2"}>
         <img className={"px-5 h-24 mx-auto"} src={"logo.png"} alt={"society logo"} />
       </NavLink>
