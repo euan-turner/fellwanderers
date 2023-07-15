@@ -2,6 +2,7 @@ import { FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faPersonHiking, faHashtag, faEnvelope, faArrowRight, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 
 import PageHeader from "../components/PageHeader";
+import PageFooter from "../components/PageFooter";
 import TextImage from "../components/TextImage";
 import StyledLink from "../components/StyledLink.tsx";
 
@@ -108,6 +109,7 @@ export default function HomePage() {
           <TextImage title={section.title} content={section.content} src={section.src} alt={section.alt} textLeft={section.textLeft} />
         ))}
       </div>
+      <PageFooter />
     </div>
   )
 }
