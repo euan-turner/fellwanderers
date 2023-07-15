@@ -1,4 +1,5 @@
 import PageHeader from "../components/PageHeader"
+import PageFooter from "../components/PageFooter";
 
 const people = [
   {
@@ -71,6 +72,7 @@ export default function CommitteePage() {
           </ul>
         </div>
       </div>
+      <PageFooter />
     </>
   )
 }
