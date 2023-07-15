@@ -10,31 +10,35 @@ const mailLink = "https://mailman.ic.ac.uk/mailman/listinfo/fellwanderers";
 
 export default function PageFooter() {
   return (
-    <div className={"flex flex-row justify-around items-center w-screen h-20 px-2 py-4 mb-4 sm:px-0"}>
-      <StyledLink href={instaLink}
-                  className={"inline-block p-2 bg-green-900/50 font-semibold rounded-md no-underline hover:bg-green-900/60"}
-                  children={(
-                    <div>
-                      <FontAwesomeIcon icon={faInstagram} /> Follow Us
-                    </div>
-                  )}
-      />
-      <StyledLink href={mailLink}
-                  className={"inline-block p-2 bg-green-900/50 font-semibold rounded-md no-underline hover:bg-green-900/60"}
-                  children={(
-                    <div>
-                      <FontAwesomeIcon icon={faEnvelope} /> Mailing List
-                    </div>
-                  )}
-      />
-      <StyledLink href={shopLink}
-                  className={"inline-block p-2 bg-green-900/50 font-semibold rounded-md no-underline hover:bg-green-900/60"}
-                  children={(
-                    <div>
-                      <FontAwesomeIcon icon={faBagShopping} /> Union Shop
-                    </div>
-                  )}
-      />
+    <div className={"w-screen h-20 px-2 sm:px-0"}>
+      <div className={"bg-white pt-2 mb-4 shadow-md"}>
+      </div>
+      <div className={"flex flex-row justify-end space-x-5 px-10 items-center"}>
+        <StyledLink href={instaLink}
+                    className={"inline-block p-2 bg-green-900/50 font-semibold rounded-md no-underline hover:bg-green-900/60"}
+                    children={(
+                      <div>
+                        <FontAwesomeIcon icon={faInstagram} /> Follow Us
+                      </div>
+                    )}
+        />
+        <StyledLink href={mailLink}
+                    className={"inline-block p-2 bg-green-900/50 font-semibold rounded-md no-underline hover:bg-green-900/60"}
+                    children={(
+                      <div>
+                        <FontAwesomeIcon icon={faEnvelope} /> Mailing List
+                      </div>
+                    )}
+        />
+        <StyledLink href={shopLink}
+                    className={"inline-block p-2 bg-green-900/50 font-semibold rounded-md no-underline hover:bg-green-900/60"}
+                    children={(
+                      <div>
+                        <FontAwesomeIcon icon={faBagShopping} /> Union Shop
+                      </div>
+                    )}
+        />
+      </div>
     </div>
   )
 }
