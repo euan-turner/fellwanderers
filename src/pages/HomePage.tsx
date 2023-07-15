@@ -20,7 +20,7 @@ function HeroSection() {
         <div className={"flex flex-row w-1/2 justify-start space-x-5 px-10"}>
           <StyledLink
             href={joinLink}
-            className={"inline-block p-2 bg-green-900/50 font-semibold rounded-md no-underline hover:bg-green-900/60"}
+            className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border font-semibold rounded-md no-underline hover:bg-green-900/60"}
             children={(
               <div>
                 <FontAwesomeIcon icon={faPersonHiking} /> Join Now <FontAwesomeIcon icon={faArrowRight} />
@@ -29,7 +29,7 @@ function HeroSection() {
           />
           <StyledLink
             href={socLink}
-            className={"inline-block p-2 bg-green-900/50 font-semibold rounded-md no-underline hover:bg-green-900/60"}
+            className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border font-semibold rounded-md no-underline hover:bg-green-900/60"}
             children={(
               <div>
                 <FontAwesomeIcon icon={faCircleInfo} /> More Info <FontAwesomeIcon icon={faArrowRight} />

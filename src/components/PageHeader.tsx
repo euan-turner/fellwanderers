@@ -21,18 +21,18 @@ export default function PageHeader() {
       </NavLink>
       <div className={"w-1/2"}>
         <Tab.Group selectedIndex={page}>
-          <Tab.List className={"max-h-12 w-1/2 mx-auto flex justify-center items-center rounded-xl bg-green-900/20 p-1"}>
+          <Tab.List className={"max-h-12 w-1/2 mx-auto flex justify-center items-center rounded-xl bg-logoGreen-light p-1"}>
             {links.map((link) => (
               <NavLink to={link.link} className={"w-full"}>
                 <Tab
                   key={link.id}
                   className={({ selected } ) =>
                     classNames(
-                      'w-full rounded-md px-2.5 py-2.5 text-sm font-medium leading-5 text-green-700',
-                      'ring-white ring-opacity-60 ring-offset-2 ring-offset-green-600 focus:outline-none focus:ring-2',
+                      'w-full rounded-md px-2.5 py-2.5 text-sm leading-5 text-black font-semibold',
+                      'ring-white ring-opacity-60 ring-offset-2 ring-offset-logoGreen-light focus:outline-none focus:ring-2',
                       selected
                         ? 'bg-white shadow'
-                        : 'text-green-600 hover:bg-white/[0.12] hover:text-green-800'
+                        : 'hover:bg-white/[0.2]'
                     )
                   }
                 >{link.text}

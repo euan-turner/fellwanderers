@@ -15,7 +15,7 @@ export default function PageFooter() {
       </div>
       <div className={"flex flex-row justify-end space-x-5 px-10 items-center"}>
         <StyledLink href={instaLink}
-                    className={"inline-block p-2 bg-green-900/50 font-semibold rounded-md no-underline hover:bg-green-900/60"}
+                    className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border font-semibold rounded-md no-underline hover:bg-green-900/60"}
                     children={(
                       <div>
                         <FontAwesomeIcon icon={faInstagram} /> Follow Us
@@ -23,7 +23,7 @@ export default function PageFooter() {
                     )}
         />
         <StyledLink href={mailLink}
-                    className={"inline-block p-2 bg-green-900/50 font-semibold rounded-md no-underline hover:bg-green-900/60"}
+                    className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border font-semibold rounded-md no-underline hover:bg-green-900/60"}
                     children={(
                       <div>
                         <FontAwesomeIcon icon={faEnvelope} /> Mailing List
@@ -31,7 +31,7 @@ export default function PageFooter() {
                     )}
         />
         <StyledLink href={shopLink}
-                    className={"inline-block p-2 bg-green-900/50 font-semibold rounded-md no-underline hover:bg-green-900/60"}
+                    className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border font-semibold rounded-md no-underline hover:bg-green-900/60"}
                     children={(
                       <div>
                         <FontAwesomeIcon icon={faBagShopping} /> Union Shop
