@@ -1,5 +1,18 @@
-import PageHeader from "../components/PageHeader"
+import { LoremIpsum } from "lorem-ipsum";
+
+import PageHeader from "../components/PageHeader";
 import PageFooter from "../components/PageFooter";
+
+const lorem = new LoremIpsum({
+  sentencesPerParagraph: {
+    max: 8,
+    min: 4
+  },
+  wordsPerSentence: {
+    max: 16,
+    min: 4
+  }
+});
 
 const people = [
   {
@@ -13,33 +26,33 @@ const people = [
     image: 'person.png'
   },
   {
-    name: 'blah',
-    role: 'blah',
+    name: lorem.generateWords(2),
+    role: lorem.generateWords(2),
     image: 'person.png'
   },
   {
-    name: 'blah',
-    role: 'blah',
+    name: lorem.generateWords(2),
+    role: lorem.generateWords(2),
     image: 'person.png'
   },
   {
-    name: 'blah',
-    role: 'blah',
+    name: lorem.generateWords(2),
+    role: lorem.generateWords(2),
     image: 'person.png'
   },
   {
-    name: 'blah',
-    role: 'blah',
+    name: lorem.generateWords(2),
+    role: lorem.generateWords(2),
     image: 'person.png'
   },
   {
-    name: 'blah',
-    role: 'blah',
+    name: lorem.generateWords(2),
+    role: lorem.generateWords(2),
     image: 'person.png'
   },
   {
-    name: 'blah',
-    role: 'blah',
+    name: lorem.generateWords(2),
+    role: lorem.generateWords(2),
     image: 'person.png'
   }
 ]
@@ -53,8 +66,7 @@ export default function CommitteePage() {
           <div className="max-w-2xl">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Meet your committee</h2>
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              Libero fames augue nisl porttitor nisi, quis. Id ac elit odio vitae elementum enim vitae ullamcorper
-              suspendisse.
+              {lorem.generateParagraphs(1)};
             </p>
           </div>
           <ul role="list" className="grid gap-x-8 gap-y-12 sm:grid-cols-2 sm:gap-y-16 xl:col-span-2">
