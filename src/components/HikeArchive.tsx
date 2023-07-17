@@ -8,16 +8,16 @@ interface HikeArchiveProps {
 }
 
 export default function HikeArchive({ title, desc, images, textLeft }: HikeArchiveProps) {
-  const style = ["w-full", "flex", textLeft ? "flex-row" : "flex-row-reverse", "rounded-md", "border-4", "border-green-900/20"];
+  const style = ["h-full", "w-full", "flex", textLeft ? "flex-row" : "flex-row-reverse", "rounded-md", "border-4", "border-logoGreen-dark"];
   return (
-    <div className={"h-screen px-10 py-5"}>
+    <div className={"h-[32rem] px-10 py-5"}>
       <div className={style.join(' ')}>
         <div className={"flex-1"}>
-          <div className={"h-full"}>
-            <h1 className={"text-3xl font-bold mb-2 p-2"}>
+          <div className={"h-full overflow-y-auto px-8 pt-4"}>
+            <h1 className={"text-3xl font-bold mb-2"}>
               {title}
             </h1>
-            <p className={"p-2"}>
+            <p>
               {desc}
             </p>
           </div>
