@@ -66,18 +66,19 @@ export default function CommitteePage() {
           <div className="max-w-2xl">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Meet your committee</h2>
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              {lorem.generateParagraphs(1)};
+              {lorem.generateParagraphs(1)}
             </p>
           </div>
           <ul role="list" className="grid gap-x-8 gap-y-12 sm:grid-cols-2 sm:gap-y-16 xl:col-span-2">
             {people.map((person) => (
               <li key={person.name}>
-                <div className="flex items-center gap-x-6">
-                  <img className="h-16 w-16 rounded-full" src={person.image} alt="" />
-                  <div>
-                    <h3 className="text-base font-semibold leading-7 tracking-tight text-gray-900">{person.name}</h3>
-                    <p className="text-sm font-semibold leading-6 text-indigo-600">{person.role}</p>
-                  </div>
+                <div className="overflow-visible relative max-w-sm mx-auto bg-white shadow-lg ring-1 ring-black/5 rounded-xl flex items-center gap-6 dark:bg-slate-800 dark:highlight-white/5">
+                  <img className="absolute -left-6 w-24 h-24 rounded-full shadow-lg"
+                       src={person.image} alt={person.name}/>
+                    <div className="flex flex-col py-5 pl-24">
+                      <strong className="text-slate-900 text-sm font-medium dark:text-slate-200">{person.name}</strong>
+                      <span className="text-slate-500 text-sm font-medium dark:text-slate-400">{person.role}</span>
+                    </div>
                 </div>
               </li>
             ))}
@@ -88,5 +89,3 @@ export default function CommitteePage() {
     </>
   )
 }
-
-// https://tailwindui.com/components/marketing/sections/team-sections
