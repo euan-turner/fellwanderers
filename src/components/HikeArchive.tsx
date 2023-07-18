@@ -13,8 +13,8 @@ export default function HikeArchive({ title, desc, images, textLeft }: HikeArchi
     <div className={"h-[32rem] px-10 py-5"}>
       <div className={style.join(' ')}>
         <div className={"flex-1"}>
-          <div className={"h-full overflow-y-auto px-8 pt-4"}>
-            <h1 className={"text-3xl font-bold mb-2"}>
+          <div className={"h-full px-8 overflow-y-auto"}>
+            <h1 className={"sticky bg-white bg-opacity-95 top-0 text-3xl font-bold py-2"}>
               {title}
             </h1>
             <p>
