@@ -64,12 +64,13 @@ export default function ActivitiesPage() {
   useEffect(() => {
     retrieveActivitiesData()
       .then((activities) => {
-      setActivityData(activities);
+        activities.sort((a, b) => a.date.getTime() - b.date.getTime());
+        setActivityData(activities);
     })
     .catch((error) => {
       console.error(error);
     })
-  }, [])
+  }, [activityData]);
   return (
     <>
       <PageHeader />
