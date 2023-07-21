@@ -8,6 +8,7 @@ import { db } from "../../firebase.ts";
 enum Type {
   Hike,
   Social,
+  Blank,
 }
 
 interface Activity {
@@ -23,6 +24,8 @@ interface CalendarProps {
 
 function colourActivity(type: Type): string {
   switch (type) {
+    case Type.Blank:
+      return 'bg-white';
     case Type.Hike:
       return 'bg-green-200';
     case Type.Social:
@@ -43,7 +46,7 @@ const isSameWeek = (date1: Date, date2: Date) => {
     === Math.ceil((date2.getTime() - (day2 - 1) * oneDay) / oneWeek);
 }
 
-function Calendar({ activities }: CalendarProps) {
+const groupActivities = (activities: Activity[]) => {
   const weeks: Activity[][] = [];
   let currentWeek: Activity[] = [];
   activities.forEach((activity) => {
@@ -58,7 +61,33 @@ function Calendar({ activities }: CalendarProps) {
   if (currentWeek.length > 0) {
     weeks.push(currentWeek);
   }
-  console.log(weeks);
+  return weeks;
+}
+
+// const addFillerActivities = (weeks: Activity[][]) => {
+//   for (const week of weeks) {
+//     for (let i = 0; i < 7; i++) {
+//       const actDate = week[i].date;
+//       if (actDate.getDay() !== i) {
+//         const newDate = new Date(actDate);
+//         const dayDiff = newDate.getDay() - i;
+//         newDate.setDate(newDate.getDate() - dayDiff);
+//         console.log(week);
+//         week.unshift({
+//           title: "",
+//           date: newDate,
+//           type: Type.Blank,
+//           misc: "",
+//         });
+//         console.log(week);
+//       }
+//     }
+//   }
+//   return weeks;
+// }
+
+function Calendar({ activities }: CalendarProps) {
+  const weeks = groupActivities(activities);
   return (
     <div className={"container mx-auto py-8"}>
       <h1 className={"text-2xl font-bold mb-4"}>Upcoming Activities</h1>
@@ -80,6 +109,7 @@ function Calendar({ activities }: CalendarProps) {
 }
 
 async function retrieveActivitiesData() {
+  console.log("Retrieving activities");
   const querySnapshot = await getDocs(collection(db, "activities"));
   const activities: Activity[] = [];
   querySnapshot.forEach((activity) => {
@@ -94,15 +124,39 @@ export default function ActivitiesPage() {
   const [activityData, setActivityData] = useState<Activity[]>([]);
   
   useEffect(() => {
-    retrieveActivitiesData()
-      .then((activities) => {
-        activities.sort((a, b) => a.date.getTime() - b.date.getTime());
-        setActivityData(activities);
-    })
-    .catch((error) => {
-      console.error(error);
-    })
-  }, [activityData]);
+    const getCachedActivities = () => {
+      const cachedActivities = localStorage.getItem("activities");
+      if (cachedActivities) {
+        const activities = JSON.parse(cachedActivities);
+        activities.forEach((activity: Activity) => {
+          activity.date = new Date(activity.date);
+        });
+        return activities;
+      }
+      return null;
+    };
+    const fetchActivitiesAndCache = async () => {
+      retrieveActivitiesData()
+        .then((activities) => {
+          activities.sort((a, b) => a.date.getTime() - b.date.getTime());
+          setActivityData(activities);
+          localStorage.setItem("activities", JSON.stringify(activities));
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+    }
+    
+    const cachedActivities = getCachedActivities();
+    if (cachedActivities) {
+      setActivityData(cachedActivities);
+    } else {
+      fetchActivitiesAndCache()
+        .catch((error) => {
+          console.error("Error fetching activities: ", error);
+        });
+    }
+  }, []);
   return (
     <>
       <PageHeader />
