@@ -69,7 +69,6 @@ const firstMondayOfMonth = (date: Date) => {
   const day = date.getDay();
   const diff = date.getDate() - day + (day === 0 ? -6 : 1);
   tempDate.setDate(diff);
-  console.log("Monday: " + tempDate.toDateString());
   return tempDate;
 }
 
@@ -80,28 +79,36 @@ const lastSundayOfMonth = (date: Date) => {
   while (tempDate.getDay() !== 0) {
     tempDate.setDate(tempDate.getDate() + 1);
   }
-  console.log("Sunday: " + tempDate.toDateString());
   return tempDate;
 }
 
-const createMonthActivities = (startDate: Date) => {
+// PRE: planned activities are in chronological order
+const createMonthActivities = (startDate: Date, planned: Activity[]) => {
   const currDate = firstMondayOfMonth(startDate);
   const endDate = lastSundayOfMonth(startDate);
+  const monthActivities = planned.filter((activity) => {
+    const actDate = activity.date;
+    return actDate >= currDate && actDate <= endDate;
+  });
   const activities: Activity[] = [];
   while (currDate.getTime() <= endDate.getTime()) {
-    activities.push({
-          title: currDate.toDateString(),
-          date: new Date(currDate),
-          type: Type.Blank,
-          misc: "",
-        });
+    if ((monthActivities.length > 0) && (currDate.toString() === monthActivities[0].date.toString())) {
+      activities.push(monthActivities.shift() as Activity);
+    } else {
+      activities.push({
+        title: "",
+        date: new Date(currDate),
+        type: Type.Blank,
+        misc: "",
+      });
+    }
     currDate.setDate(currDate.getDate() + 1);
   }
   return activities;
 }
 
 function Calendar({ activities }: CalendarProps) {
-  const blankActivities = createMonthActivities(new Date(2023, 5, 1));
+  const blankActivities = createMonthActivities(new Date(2023, 5, 1), activities);
   // Add activities into blankActivities
   const weeks = groupActivities(blankActivities);
   return (
@@ -112,8 +119,8 @@ function Calendar({ activities }: CalendarProps) {
           <div key={weekIndex} className={"grid grid-cols-7 gap-4"}>
             {week.map((act, actIndex) => (
               <div key={actIndex} className={colourActivity(act.type).concat(" shadow-md p-4")}>
-                <h2 className={"text-lg font-semibold"}>{act.title}</h2>
                 <h3 className={"text-gray-700"}>{act.date.toDateString()}</h3>
+                <h2 className={"text-lg font-semibold"}>{act.title}</h2>
                 <p className={"text-gray-500"}>{act.misc}</p>
               </div>
             ))}
