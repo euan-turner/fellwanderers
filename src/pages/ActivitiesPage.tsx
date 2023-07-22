@@ -64,36 +64,52 @@ const groupActivities = (activities: Activity[]) => {
   return weeks;
 }
 
-// const addFillerActivities = (weeks: Activity[][]) => {
-//   for (const week of weeks) {
-//     for (let i = 0; i < 7; i++) {
-//       const actDate = week[i].date;
-//       if (actDate.getDay() !== i) {
-//         const newDate = new Date(actDate);
-//         const dayDiff = newDate.getDay() - i;
-//         newDate.setDate(newDate.getDate() - dayDiff);
-//         console.log(week);
-//         week.unshift({
-//           title: "",
-//           date: newDate,
-//           type: Type.Blank,
-//           misc: "",
-//         });
-//         console.log(week);
-//       }
-//     }
-//   }
-//   return weeks;
-// }
+const firstMondayOfMonth = (date: Date) => {
+  const tempDate = new Date(date);
+  const day = date.getDay();
+  const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+  tempDate.setDate(diff);
+  console.log("Monday: " + tempDate.toDateString());
+  return tempDate;
+}
+
+const lastSundayOfMonth = (date: Date) => {
+  const tempDate = new Date(date);
+  tempDate.setDate(1);
+  tempDate.setMonth(date.getMonth() + 1);
+  while (tempDate.getDay() !== 0) {
+    tempDate.setDate(tempDate.getDate() + 1);
+  }
+  console.log("Sunday: " + tempDate.toDateString());
+  return tempDate;
+}
+
+const createMonthActivities = (startDate: Date) => {
+  const currDate = firstMondayOfMonth(startDate);
+  const endDate = lastSundayOfMonth(startDate);
+  const activities: Activity[] = [];
+  while (currDate.getTime() <= endDate.getTime()) {
+    activities.push({
+          title: currDate.toDateString(),
+          date: new Date(currDate),
+          type: Type.Blank,
+          misc: "",
+        });
+    currDate.setDate(currDate.getDate() + 1);
+  }
+  return activities;
+}
 
 function Calendar({ activities }: CalendarProps) {
-  const weeks = groupActivities(activities);
+  const blankActivities = createMonthActivities(new Date(2023, 5, 1));
+  // Add activities into blankActivities
+  const weeks = groupActivities(blankActivities);
   return (
     <div className={"container mx-auto py-8"}>
       <h1 className={"text-2xl font-bold mb-4"}>Upcoming Activities</h1>
-      <div className={"flex flex-col"}>
+      <div className={"grid grid-rows-5 gap-4"}>
         {weeks.map((week, weekIndex) => (
-          <div key={weekIndex} className={"flex flex-row gap-4"}>
+          <div key={weekIndex} className={"grid grid-cols-7 gap-4"}>
             {week.map((act, actIndex) => (
               <div key={actIndex} className={colourActivity(act.type).concat(" shadow-md p-4")}>
                 <h2 className={"text-lg font-semibold"}>{act.title}</h2>
