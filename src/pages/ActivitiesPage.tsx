@@ -111,29 +111,41 @@ const createMonthActivities = (startDate: Date, planned: Activity[]) => {
 
 function Calendar({ activities }: CalendarProps) {
   const [monthStart, setMonthStart] = useState<Date>(new Date(2023, 5, 1));
-  
+  const [prevDisabled, setPrevDisabled] = useState(false);
+  const [nextDisabled, setNextDisabled] = useState(false);
+  const earliest = new Date(2023, 4, 1);
+  const latest = new Date(2023, 7, 1);
   const nextMonth = () => {
     setMonthStart(new Date(monthStart.setMonth(monthStart.getMonth() + 1)));
+    setNextDisabled(monthStart.getTime() >= latest.getTime());
+    setPrevDisabled(false);
   }
   const prevMonth = () => {
     setMonthStart(new Date(monthStart.setMonth(monthStart.getMonth() - 1)));
+    setPrevDisabled(monthStart.getTime() <= earliest.getTime());
+    setNextDisabled(false);
   }
   const dateFormat: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long'};
   const blankActivities = createMonthActivities(monthStart, activities);
-  // Add activities into blankActivities
   const weeks = groupActivities(blankActivities);
   return (
     <div className={"container mx-auto py-8"}>
       <div className={"flex justify-center items-center mb-4"}>
-        <button className={"bg-white hover:bg-gray-100 font-bold py-2 px-4 rounded-lg"} onClick={prevMonth}>
-          <FontAwesomeIcon icon={faChevronLeft} />
+        <button className={"bg-white hover:scale-y-110 py-2 px-4 rounded-lg"} onClick={prevMonth} disabled={prevDisabled}>
+          {!prevDisabled && (
+            <FontAwesomeIcon icon={faChevronLeft} />
+          )}
         </button>
         <h1 className={"text-2xl font-bold"}>
           {monthStart.toLocaleDateString('default', dateFormat)}
         </h1>
-        <button className={"bg-white hover:bg-gray-100 font-bold py-2 px-4 rounded-lg"} onClick={nextMonth}>
-          <FontAwesomeIcon icon={faChevronRight} />
+        
+        <button className={"bg-white hover:scale-y-110 font-bold py-2 px-4 rounded-lg"} onClick={nextMonth} disabled={nextDisabled}>
+          {!nextDisabled && (
+            <FontAwesomeIcon icon={faChevronRight} />
+          )}
         </button>
+        
       </div>
       <div className={"grid grid-rows-5 gap-4"}>
         {weeks.map((week, weekIndex) => (
