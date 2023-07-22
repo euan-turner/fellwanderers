@@ -35,37 +35,6 @@ function colourActivity(type: Type): string {
   }
 }
 
-const isSameWeek = (date1: Date, date2: Date) => {
-  const oneDay = 24 * 60 * 60 * 1000;
-  const oneWeek = oneDay * 7;
-  const diff = Math.abs(date1.getTime() - date2.getTime());
-  if (diff >= oneWeek) return false; // More than 7 days apart
-  let day1 = date1.getDay();
-  let day2 = date2.getDay();
-  if (day1 === 0) day1 = 7;
-  if (day2 === 0) day2 = 7;
-  return Math.ceil((date1.getTime() - (day1 - 1) * oneDay) / oneWeek)
-    === Math.ceil((date2.getTime() - (day2 - 1) * oneDay) / oneWeek);
-}
-
-const groupActivities = (activities: Activity[]) => {
-  const weeks: Activity[][] = [];
-  let currentWeek: Activity[] = [];
-  activities.forEach((activity) => {
-    if (currentWeek.length === 0 || isSameWeek(currentWeek[currentWeek.length - 1].date, activity.date)
-    ) {
-      currentWeek.push(activity);
-    } else {
-      weeks.push(currentWeek);
-      currentWeek = [activity];
-    }
-  })
-  if (currentWeek.length > 0) {
-    weeks.push(currentWeek);
-  }
-  return weeks;
-}
-
 const firstMondayOfMonth = (date: Date) => {
   const tempDate = new Date(date);
   const day = date.getDay();
@@ -126,8 +95,7 @@ function Calendar({ activities }: CalendarProps) {
     setNextDisabled(false);
   }
   const dateFormat: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long'};
-  const blankActivities = createMonthActivities(monthStart, activities);
-  const weeks = groupActivities(blankActivities);
+  const monthActivities = createMonthActivities(monthStart, activities);
   return (
     <div className={"container mx-auto py-8"}>
       <div className={"flex justify-center items-center mb-4"}>
@@ -147,18 +115,16 @@ function Calendar({ activities }: CalendarProps) {
         </button>
         
       </div>
-      <div className={"grid grid-rows-5 gap-4"}>
-        {weeks.map((week, weekIndex) => (
-          <div key={weekIndex} className={"grid grid-cols-7 gap-4"}>
-            {week.map((act, actIndex) => (
-              <div key={actIndex} className={colourActivity(act.type).concat(" shadow-md p-4")}>
-                <h3 className={"text-gray-700"}>{act.date.toDateString()}</h3>
-                <h2 className={"text-lg font-semibold"}>{act.title}</h2>
-                <p className={"text-gray-500"}>{act.misc}</p>
-              </div>
-            ))}
+
+      <div className={"grid grid-rows-5 grid-cols-7 gap-4 max-h-screen"}>
+        {monthActivities.map((act, actIndex) => (
+          <div key={actIndex} className={colourActivity(act.type).concat(" shadow-md p-4 h-32")}>
+            <h3 className={"text-gray-700"}>{act.date.toDateString()}</h3>
+            <h2 className={"text-lg font-semibold"}>{act.title}</h2>
+            <p className={"text-gray-500"}>{act.misc}</p>
           </div>
-        ))}
+          )
+        )}
       </div>
     </div>
   );
