@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
 import PageFooter from "../components/PageFooter";
 import { db } from "../../firebase.ts";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
 
 enum Type {
   Hike,
@@ -108,12 +110,31 @@ const createMonthActivities = (startDate: Date, planned: Activity[]) => {
 }
 
 function Calendar({ activities }: CalendarProps) {
-  const blankActivities = createMonthActivities(new Date(2023, 5, 1), activities);
+  const [monthStart, setMonthStart] = useState<Date>(new Date(2023, 5, 1));
+  
+  const nextMonth = () => {
+    setMonthStart(new Date(monthStart.setMonth(monthStart.getMonth() + 1)));
+  }
+  const prevMonth = () => {
+    setMonthStart(new Date(monthStart.setMonth(monthStart.getMonth() - 1)));
+  }
+  const dateFormat: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long'};
+  const blankActivities = createMonthActivities(monthStart, activities);
   // Add activities into blankActivities
   const weeks = groupActivities(blankActivities);
   return (
     <div className={"container mx-auto py-8"}>
-      <h1 className={"text-2xl font-bold mb-4"}>Upcoming Activities</h1>
+      <div className={"flex justify-center items-center mb-4"}>
+        <button className={"bg-white hover:bg-gray-100 font-bold py-2 px-4 rounded-lg"} onClick={prevMonth}>
+          <FontAwesomeIcon icon={faChevronLeft} />
+        </button>
+        <h1 className={"text-2xl font-bold"}>
+          {monthStart.toLocaleDateString('default', dateFormat)}
+        </h1>
+        <button className={"bg-white hover:bg-gray-100 font-bold py-2 px-4 rounded-lg"} onClick={nextMonth}>
+          <FontAwesomeIcon icon={faChevronRight} />
+        </button>
+      </div>
       <div className={"grid grid-rows-5 gap-4"}>
         {weeks.map((week, weekIndex) => (
           <div key={weekIndex} className={"grid grid-cols-7 gap-4"}>
