@@ -23,7 +23,7 @@ export default function PageHeader() {
         <Tab.Group selectedIndex={page}>
           <Tab.List className={"max-h-12 w-1/2 mx-auto flex justify-center items-center rounded-xl bg-logoGreen-light border-logoGreen-dark border p-1"}>
             {links.map((link) => (
-              <NavLink to={link.link} className={"w-full"}>
+              <NavLink key={link.id} to={link.link} className={"w-full"}>
                 <Tab
                   key={link.id}
                   className={({ selected } ) =>

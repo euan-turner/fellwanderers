@@ -131,7 +131,6 @@ function Calendar({ activities }: CalendarProps) {
 }
 
 async function retrieveActivitiesData() {
-  console.log("Retrieving activities");
   const querySnapshot = await getDocs(collection(db, "activities"));
   const activities: Activity[] = [];
   querySnapshot.forEach((activity) => {

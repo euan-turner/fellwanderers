@@ -3,11 +3,11 @@ import ImageSlideshow from './ImageSlideshow.tsx';
 interface HikeArchiveProps {
   title: string;
   desc: string;
-  images: string[];
+  directory: string;
   textLeft: boolean;
 }
 
-export default function HikeArchive({ title, desc, images, textLeft }: HikeArchiveProps) {
+export default function HikeArchive({ title, desc, directory, textLeft }: HikeArchiveProps) {
   const style = ["h-full", "w-full", "flex", textLeft ? "flex-row" : "flex-row-reverse", "rounded-md", "border-4", "border-logoGreen-dark"];
   return (
     <div className={"h-[32rem] px-10 py-5"}>
@@ -24,7 +24,7 @@ export default function HikeArchive({ title, desc, images, textLeft }: HikeArchi
         </div>
         <div className={"flex-1"}>
           <div className={"h-full"}>
-            <ImageSlideshow images={images} />
+            <ImageSlideshow directory={directory} />
           </div>
         </div>
       </div>
