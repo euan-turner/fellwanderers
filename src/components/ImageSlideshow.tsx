@@ -43,7 +43,7 @@ export default function ImageSlideshow({ directory }: SlideshowProps) {
   
   return (
     <div className={"relative w-full h-full overflow-hidden flex items-center"}>
-      <img src={imageUrls[currentSlide]} alt={"Slideshow Image"} className={"w-full object-center"} />
+      <img src={imageUrls[currentSlide]} alt={"Slideshow Image"} className={"w-full h-full object-center"} />
       <div className={"absolute top-1/2 left-0 right-0 flex justify-between"}>
         <button className={"bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-l"} onClick={prevSlide}>
           <FontAwesomeIcon icon={faChevronLeft} />

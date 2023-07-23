@@ -44,7 +44,9 @@ export default function ArchivePage() {
           </p>
         </div>
         {hikes.map((hike) => (
-          <HikeArchive title={hike.title} desc={hike.desc} directory={hike.directory} textLeft={hike.textLeft} />
+          <div key={hike.title}>
+            <HikeArchive title={hike.title} desc={hike.desc} directory={hike.directory} textLeft={hike.textLeft} />
+          </div>
         ))}
       </div>
       <PageFooter />
