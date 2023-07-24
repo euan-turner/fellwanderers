@@ -7,6 +7,7 @@ import Calendar from "../components/Calendar";
 import { db } from "../../firebase.ts";
 import Activity from "../types/Activity.ts";
 
+
 async function retrieveActivitiesData() {
   const querySnapshot = await getDocs(collection(db, "activities"));
   const activities: Activity[] = [];
