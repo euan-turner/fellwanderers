@@ -2,30 +2,19 @@ import {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
 
-enum Type {
-  Hike,
-  Social,
-  Blank,
-}
-
-interface Activity {
-  title: string;
-  date: Date;
-  type: Type;
-  misc: string;
-}
+import Activity, { ActivityType } from "../types/Activity.ts"
 
 interface CalendarProps {
   activities: Activity[];
 }
 
-function colourActivity(type: Type): string {
+function colourActivity(type: ActivityType): string {
   switch (type) {
-    case Type.Blank:
+    case ActivityType.Blank:
       return 'bg-white';
-    case Type.Hike:
+    case ActivityType.Hike:
       return 'bg-green-200';
-    case Type.Social:
+    case ActivityType.Social:
       return 'bg-orange-200';
   }
 }
@@ -64,7 +53,7 @@ const createMonthActivities = (startDate: Date, planned: Activity[]) => {
       activities.push({
         title: "",
         date: new Date(currDate),
-        type: Type.Blank,
+        type: ActivityType.Blank,
         misc: "",
       });
     }

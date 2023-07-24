@@ -5,19 +5,7 @@ import PageHeader from "../components/PageHeader";
 import PageFooter from "../components/PageFooter";
 import Calendar from "../components/Calendar";
 import { db } from "../../firebase.ts";
-
-enum Type {
-  Hike,
-  Social,
-  Blank,
-}
-
-interface Activity {
-  title: string;
-  date: Date;
-  type: Type;
-  misc: string;
-}
+import Activity from "../types/Activity.ts";
 
 async function retrieveActivitiesData() {
   const querySnapshot = await getDocs(collection(db, "activities"));
