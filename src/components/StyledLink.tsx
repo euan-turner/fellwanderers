@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface ButtonLinkProps {
   href: string;
@@ -6,12 +6,14 @@ interface ButtonLinkProps {
   children: React.ReactNode;
 }
 
-const StyledLink: React.FC<ButtonLinkProps> = ({ href, className, children} ) => {
+export default function StyledLink({
+  href,
+  className,
+  children,
+}: ButtonLinkProps) {
   return (
     <a href={href} target={"_blank"} className={className}>
       {children}
     </a>
   );
 }
-
-export default StyledLink;

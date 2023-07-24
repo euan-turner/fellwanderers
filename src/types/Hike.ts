@@ -1,5 +1,3 @@
-
-
 export default interface Hike {
   title: string;
   desc: string;
