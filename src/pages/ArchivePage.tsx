@@ -1,17 +1,11 @@
 import {collection, getDocs} from "firebase/firestore";
 import {useEffect, useState} from "react";
 
-import HikeArchive from "../components/HikeArchive";
+import HikeArchive from "../components/HikeArchive.tsx";
 import PageHeader from "../components/PageHeader";
 import PageFooter from "../components/PageFooter";
 import {db} from "../../firebase.ts";
-
-interface Hike {
-  title: string;
-  desc: string;
-  directory: string;
-  textLeft: boolean;
-}
+import Hike from "../types/Hike.ts";
 
 async function retrieveArchiveData() {
   const querySnapshot = await getDocs(collection(db, "archive"));

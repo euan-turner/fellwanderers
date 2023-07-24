@@ -1,13 +1,7 @@
 import ImageSlideshow from './ImageSlideshow.tsx';
+import Hike from "../types/Hike.ts";
 
-interface HikeArchiveProps {
-  title: string;
-  desc: string;
-  directory: string;
-  textLeft: boolean;
-}
-
-export default function HikeArchive({ title, desc, directory, textLeft }: HikeArchiveProps) {
+export default function HikeArchive({ title, desc, directory, textLeft }: Hike) {
   const style = ["h-full", "w-full", "flex", textLeft ? "flex-row" : "flex-row-reverse", "rounded-md", "border-4", "border-logoGreen-dark"];
   return (
     <div className={"h-[32rem] px-10 py-5"}>

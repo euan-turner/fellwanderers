@@ -2,6 +2,7 @@ import { LoremIpsum } from "lorem-ipsum";
 
 import PageHeader from "../components/PageHeader";
 import PageFooter from "../components/PageFooter";
+import Committee from "../types/Committee.ts";
 
 const lorem = new LoremIpsum({
   sentencesPerParagraph: {
@@ -14,7 +15,7 @@ const lorem = new LoremIpsum({
   }
 });
 
-const people = [
+const people: Committee[] = [
   {
     name: 'James King',
     role: 'President',
