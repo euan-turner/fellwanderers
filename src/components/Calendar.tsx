@@ -133,8 +133,8 @@ export default function Calendar({ activities }: CalendarProps) {
           {!nextDisabled && <FontAwesomeIcon icon={faChevronRight} />}
         </button>
       </div>
-      <div className={"w-full overflow-x-scroll"}>
-        <div className={"inline-flex flex-col w-[800px] min-h-max lg:w-screen lg:h-[725px] overflow-y-scroll"}>
+      <div className={"w-full h-full overflow-x-scroll overflow-y-scroll"}>
+        <div className={"inline-flex flex-col w-[800px] min-h-max lg:w-full lg:h-[725px] "}>
           <div className={"grid grid-rows-5 grid-cols-7 gap-y-1 gap-x-0.5 lg:gap-4 p-2"}>
             {monthActivities.map((act, actIndex) => (
               <div
