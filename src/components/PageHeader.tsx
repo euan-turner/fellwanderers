@@ -13,25 +13,25 @@ export default function PageHeader() {
   return (
     <div
       className={
-        "shadow-md flex justify-center items-center w-screen h-30 px-2 py-4 mb-4 sm:px-0"
+        "shadow-md flex flex-col sm:flex-row space-y-2 justify-around items-center w-screen h-30 px-2 py-2 sm:py-4 mb-4"
       }
     >
-      <NavLink to={"/"} className={"w-1/2"}>
+      <NavLink to={"/"} className={""}>
         <img
-          className={"px-5 h-24 mx-auto"}
+          className={"px-5 h-20 mx-auto"}
           src={"logo.png"}
           alt={"society logo"}
         />
       </NavLink>
-      <div className={"w-1/2"}>
+      <div className={""}>
         <Tab.Group selectedIndex={page}>
           <Tab.List
             className={
-              "max-h-12 w-1/2 mx-auto flex justify-center items-center rounded-xl bg-logoGreen-light border-logoGreen-dark border p-1"
+              "max-h-12 mx-auto inline-flex min-w-max justify-center items-center rounded-xl bg-logoGreen-light border-logoGreen-dark border p-1"
             }
           >
             {links.map((link) => (
-              <NavLink key={link.id} to={link.link} className={"w-full"}>
+              <NavLink key={link.id} to={link.link} className={"inline-block max-w-full"}>
                 <Tab
                   key={link.id}
                   className={({ selected }) =>

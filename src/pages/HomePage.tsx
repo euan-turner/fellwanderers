@@ -21,14 +21,14 @@ function HeroSection() {
   return (
     <section
       className={
-        "bg-cover bg-center h-screen flex flex-col justify-start items-start p-16"
+        "bg-cover h-screen flex flex-col justify-start items-start py-16"
       }
       style={backgroundImageStyle}
     >
-      <div className={"w-1/2"}>
-        <h1 className={"text-6xl font-bold px-10"}>Fellwanderers</h1>
-        <h2 className={"text-4xl px-10 pb-5"}>Imperial's Hiking Society</h2>
-        <div className={"flex flex-row w-1/2 justify-start space-x-5 px-10"}>
+      <div className={"w-full"}>
+        <h1 className={"text-4xl sm:text-6xl font-bold px-10"}>Fellwanderers</h1>
+        <h2 className={"text-2xl sm:text-4xl pl-10 pb-5"}>Imperial's Hiking Society</h2>
+        <div className={"flex flex-row justify-start space-x-5 px-10"}>
           <StyledLink
             href={joinLink}
             className={

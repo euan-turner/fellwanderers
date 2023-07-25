@@ -9,15 +9,19 @@ const shopLink = "https://www.imperialcollegeunion.org/shop/student-groups/407";
 const mailLink = "https://mailman.ic.ac.uk/mailman/listinfo/fellwanderers";
 
 export default function PageFooter() {
+  const linkStyle =
+    "shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border text-xs sm:text-sm font-semibold rounded-md no-underline hover:bg-green-900/60";
   return (
-    <div className={"w-screen h-20 px-2 sm:px-0"}>
+    <div className={"w-screen h-20 px-0 sm:px-2"}>
       <div className={"bg-white pt-2 mb-4 shadow-md"}></div>
-      <div className={"flex flex-row justify-end space-x-5 px-10 items-center"}>
+      <div
+        className={
+          "flex flex-row justify-center sm:justify-end space-x-5 px-2 items-center"
+        }
+      >
         <StyledLink
           href={instaLink}
-          className={
-            "shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border font-semibold rounded-md no-underline hover:bg-green-900/60"
-          }
+          className={linkStyle}
           children={
             <div>
               <FontAwesomeIcon icon={faInstagram} /> Follow Us
@@ -26,9 +30,7 @@ export default function PageFooter() {
         />
         <StyledLink
           href={mailLink}
-          className={
-            "shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border font-semibold rounded-md no-underline hover:bg-green-900/60"
-          }
+          className={linkStyle}
           children={
             <div>
               <FontAwesomeIcon icon={faEnvelope} /> Mailing List
@@ -37,9 +39,7 @@ export default function PageFooter() {
         />
         <StyledLink
           href={shopLink}
-          className={
-            "shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border font-semibold rounded-md no-underline hover:bg-green-900/60"
-          }
+          className={linkStyle}
           children={
             <div>
               <FontAwesomeIcon icon={faBagShopping} /> Union Shop
