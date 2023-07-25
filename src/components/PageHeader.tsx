@@ -13,7 +13,7 @@ export default function PageHeader() {
   return (
     <div
       className={
-        "shadow-md flex flex-col sm:flex-row space-y-2 justify-around items-center w-screen h-30 px-2 py-2 sm:py-4 mb-4"
+        "shadow-md flex flex-col sm:flex-row space-y-2 justify-around items-center w-screen h-30 px-4 py-2 sm:py-4 mb-4"
       }
     >
       <NavLink to={"/"} className={""}>
@@ -23,11 +23,11 @@ export default function PageHeader() {
           alt={"society logo"}
         />
       </NavLink>
-      <div className={""}>
+      <div className={"w-full lg:w-auto"}>
         <Tab.Group selectedIndex={page}>
           <Tab.List
             className={
-              "max-h-12 mx-auto inline-flex min-w-max justify-center items-center rounded-xl bg-logoGreen-light border-logoGreen-dark border p-1"
+              "max-h-12 mx-auto flex lg:inline-flex w-full lg:min-w-max justify-around lg:justify-center items-center rounded-xl bg-logoGreen-light border-logoGreen-dark border py-2 px-1 lg:space-x-2"
             }
           >
             {links.map((link) => (
@@ -35,7 +35,7 @@ export default function PageHeader() {
                 <Tab
                   key={link.id}
                   className={({ selected }) =>
-                    "w-full rounded-md px-1 sm:px-2.5 py-2 lg:py-2.5 text-sm leading-5 text-black font-semibold " +
+                    "w-full rounded-md px-2 sm:px-2.5 py-2 lg:py-2.5 text-sm leading-5 text-black font-semibold " +
                     "ring-white ring-opacity-60 ring-offset-2 ring-offset-logoGreen-light " +
                     "focus:outline-none focus:ring-2 ".concat(
                       selected ? "bg-white shadow" : "hover:bg-white/20",
