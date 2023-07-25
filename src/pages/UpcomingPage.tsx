@@ -19,7 +19,7 @@ async function retrieveActivitiesData() {
   return activities;
 }
 
-export default function ActivitiesPage() {
+export default function UpcomingPage() {
   const [activityData, setActivityData] = useState<Activity[]>([]);
   
   useEffect(() => {

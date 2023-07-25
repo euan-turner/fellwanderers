@@ -55,12 +55,6 @@ const createMonthActivities = (startDate: Date, planned: Activity[]) => {
     return actDate >= currDate && actDate <= endDate;
   });
   const activities: Activity[] = [];
-  const blankActivity = {
-    title: "",
-    date: new Date(currDate),
-    type: ActivityType.Blank,
-    misc: "",
-  };
   while (currDate.getTime() <= endDate.getTime()) {
     if (
       monthActivities.length > 0 &&
@@ -68,7 +62,12 @@ const createMonthActivities = (startDate: Date, planned: Activity[]) => {
     ) {
       activities.push(monthActivities.shift() as Activity);
     } else {
-      activities.push(blankActivity);
+      activities.push({
+        title: "",
+        date: new Date(currDate),
+        type: ActivityType.Blank,
+        misc: "",
+      });
     }
     currDate.setDate(currDate.getDate() + 1);
   }
@@ -134,17 +133,19 @@ export default function Calendar({ activities }: CalendarProps) {
         </button>
       </div>
 
-      <div className={"grid grid-rows-5 grid-cols-7 gap-4 max-h-screen"}>
-        {monthActivities.map((act, actIndex) => (
-          <div
-            key={actIndex}
-            className={colourActivity(act.type).concat(" shadow-md p-4 h-32")}
-          >
-            <h3 className={"text-gray-700"}>{act.date.toDateString()}</h3>
-            <h2 className={"text-lg font-semibold"}>{act.title}</h2>
-            <p className={"text-gray-500"}>{act.misc}</p>
-          </div>
-        ))}
+      <div className={"flex flex-col h-[725px] overflow-y-scroll"}>
+        <div className={"grid grid-rows-5 grid-cols-7 gap-4 p-2"}>
+          {monthActivities.map((act, actIndex) => (
+            <div
+              key={actIndex}
+              className={colourActivity(act.type).concat(" shadow-md p-4 h-32 border border-slate-400")}
+            >
+              <h3 className={"text-gray-700"}>{act.date.toDateString()}</h3>
+              <h2 className={"text-lg font-semibold"}>{act.title}</h2>
+              <p className={"text-gray-500"}>{act.misc}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

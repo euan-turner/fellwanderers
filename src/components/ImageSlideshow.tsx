@@ -48,7 +48,7 @@ export default function ImageSlideshow({ directory }: SlideshowProps) {
       <img
         src={imageUrls[currentSlide]}
         alt={"Slideshow Image"}
-        className={"w-full h-full object-center"}
+        className={"object-cover w-full h-full"}
       />
       <div className={"absolute top-1/2 left-0 right-0 flex justify-between"}>
         <button

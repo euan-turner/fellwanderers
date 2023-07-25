@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
-import ActivitiesPage from "./pages/ActivitiesPage"
+import UpcomingPage from "./pages/UpcomingPage.tsx"
 import ArchivePage from "./pages/ArchivePage"
 import CommitteePage from "./pages/CommitteePage"
 import HomePage from "./pages/HomePage"
@@ -11,7 +11,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/activities",
-    element: <ActivitiesPage />
+    element: <UpcomingPage />
   },
   {
     path: "/committee",
