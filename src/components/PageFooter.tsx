@@ -16,7 +16,7 @@ export default function PageFooter() {
       <div className={"bg-white pt-2 mb-4 shadow-md"}></div>
       <div
         className={
-          "flex flex-row justify-center sm:justify-end space-x-5 px-2 items-center"
+          "flex flex-row justify-center sm:justify-end space-x-5 px-1 sm:px-2 items-center"
         }
       >
         <StyledLink
