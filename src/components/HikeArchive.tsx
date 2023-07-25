@@ -9,22 +9,18 @@ export default function HikeArchive(hike: Hike) {
   return (
     <div className={"h-[32rem] px-4 lg:px-10 py-5"}>
       <div className={style}>
-        <div className={"flex-1 overflow-y-scroll mb-1"}>
-          <div className={"px-2 lg:px-8"}>
-            <h1
-              className={
-                "sticky bg-white bg-opacity-95 top-0 text-xl lg:text-3xl font-bold py-2"
-              }
-            >
-              {hike.title}
-            </h1>
-            <p className={"text-sm lg:text-base"}>{hike.desc}</p>
-          </div>
+        <div className={"flex-1 overflow-y-scroll mb-1 px-2 lg:px-8"}>
+          <h1
+            className={
+              "sticky bg-white bg-opacity-95 top-0 text-xl lg:text-3xl font-bold py-2"
+            }
+          >
+            {hike.title}
+          </h1>
+          <p className={"text-sm lg:text-base"}>{hike.desc}</p>
         </div>
-        <div className={"flex-1"}>
-          <div className={"h-full"}>
-            <ImageSlideshow directory={hike.directory} />
-          </div>
+        <div className={"flex-1 h-full"}>
+          <ImageSlideshow directory={hike.directory} />
         </div>
       </div>
     </div>
