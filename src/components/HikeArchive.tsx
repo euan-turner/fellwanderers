@@ -2,8 +2,10 @@ import ImageSlideshow from "./ImageSlideshow.tsx";
 import Hike from "../types/Hike.ts";
 
 export default function HikeArchive(hike: Hike) {
-  const style = "h-full w-full flex rounded-md border-4 border-logoGreen-dark";
-  style.concat(hike.textLeft ? "flex-row" : "flex-row-reverse");
+  const style =
+    "h-full w-full flex rounded-md border-4 border-logoGreen-dark ".concat(
+      hike.textLeft ? "flex-row" : "flex-row-reverse",
+    );
   return (
     <div className={"h-[32rem] px-10 py-5"}>
       <div className={style}>
