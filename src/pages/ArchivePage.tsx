@@ -50,7 +50,7 @@ export default function ArchivePage() {
     <>
       <PageHeader />
       <div className={"flex flex-col-reverse"}>
-        <div className={"order-last px-10 pt-5"}>
+        <div className={"order-last px-4 lg:px-10 pt-5"}>
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Trip Archive
           </h2>
