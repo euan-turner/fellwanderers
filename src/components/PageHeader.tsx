@@ -7,6 +7,7 @@ export default function PageHeader() {
     { id: 1, link: "/activities", text: "Upcoming" },
     { id: 2, link: "/committee", text: "Committee" },
     { id: 3, link: "/archive", text: "Archive" },
+    { id: 4, link: "/faqs", text: "FAQs" }
   ];
   const location = useLocation();
   const page = links.filter((link) => link.link === location.pathname)[0].id;

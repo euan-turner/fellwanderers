@@ -3,6 +3,7 @@ import UpcomingPage from "./pages/UpcomingPage.tsx"
 import ArchivePage from "./pages/ArchivePage"
 import CommitteePage from "./pages/CommitteePage"
 import HomePage from "./pages/HomePage"
+import FaqPage from "./pages/FaqPage"
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: "/archive",
     element: <ArchivePage />
+  },
+  {
+    path: "/faqs",
+    element: <FaqPage />
   }
 ])
 
