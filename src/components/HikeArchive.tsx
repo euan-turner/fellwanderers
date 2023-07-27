@@ -4,7 +4,7 @@ import Hike from "../types/Hike.ts";
 export default function HikeArchive(hike: Hike) {
   const style =
     "h-full w-full flex rounded-md border-4 border-logoGreen-dark flex-col ".concat(
-      hike.textLeft ? "lg:flex-row" : "lg:flex-row-reverse",
+      hike.textLeft ? "sm:flex-row" : "sm:flex-row-reverse",
     );
   return (
     <div className={"h-[32rem] px-4 lg:px-10 py-5"}>

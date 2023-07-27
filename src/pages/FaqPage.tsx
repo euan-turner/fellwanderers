@@ -96,7 +96,7 @@ export default function FaqPage() {
   return (
     <>
     <PageHeader />
-    <div className={"flex flex-col justify-center items-center w-1/2 mx-auto h-screen"}>
+    <div className={"flex flex-col justify-center items-center sm:w-1/2 mx-auto h-screen"}>
       <h2 className={"w-full text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl px-4 lg:px-8"}>
         FAQs
       </h2>
