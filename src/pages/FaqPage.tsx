@@ -6,12 +6,8 @@ import { useState, useEffect } from "react";
 import PageHeader from "../components/PageHeader";
 import PageFooter from "../components/PageFooter";
 import { setStateData } from "../../firebaseAPI.ts"
+import { Faq } from "../types/Faq.ts";
 
-interface Faq {
-  id: number,
-  question: string,
-  answer: string
-}
 
 // async function storeFaq(faq: Faq) {
 //   await setDoc(doc(db, "faqs", faq.id.toString()), faq)

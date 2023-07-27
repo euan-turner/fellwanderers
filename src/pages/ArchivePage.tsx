@@ -1,50 +1,16 @@
-import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 import HikeArchive from "../components/HikeArchive.tsx";
 import PageHeader from "../components/PageHeader";
 import PageFooter from "../components/PageFooter";
-import { db } from "../../firebase.ts";
 import Hike from "../types/Hike.ts";
-
-async function retrieveArchiveData() {
-  const querySnapshot = await getDocs(collection(db, "archive"));
-  const hikes: Hike[] = [];
-  querySnapshot.forEach((hike) => {
-    hikes.push(hike.data() as Hike);
-  });
-  return hikes;
-}
+import { setStateData } from "../../firebaseAPI";
 
 export default function ArchivePage() {
   const [hikeData, setHikeData] = useState<Hike[]>([]);
 
   useEffect(() => {
-    const getCachedHikes = () => {
-      const cachedHikes = localStorage.getItem("archive");
-      if (cachedHikes) {
-        return JSON.parse(cachedHikes);
-      }
-      return null;
-    };
-    const fetchHikesAndCache = async () => {
-      retrieveArchiveData()
-        .then((hikes) => {
-          setHikeData(hikes);
-          localStorage.setItem("archive", JSON.stringify(hikes));
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    };
-    const cachedHikes = getCachedHikes();
-    if (cachedHikes) {
-      setHikeData(cachedHikes);
-    } else {
-      fetchHikesAndCache().catch((error) => {
-        console.error("Error fetching archive: ", error);
-      });
-    }
+    setStateData<Hike>("archive", (a, b) => a.title.localeCompare(b.title), setHikeData)
   }, []);
   return (
     <>
