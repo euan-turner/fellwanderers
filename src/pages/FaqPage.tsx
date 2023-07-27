@@ -23,9 +23,9 @@ async function retrieveFaqsData() {
   return faqs;
 }
 
-async function storeFaq(faq: Faq) {
-  await setDoc(doc(db, "faqs", faq.id.toString()), faq)
-}
+// async function storeFaq(faq: Faq) {
+//   await setDoc(doc(db, "faqs", faq.id.toString()), faq)
+// }
 
 const FAQ = ({id, question, answer}: Faq) => {
   return (
