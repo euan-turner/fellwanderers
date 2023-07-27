@@ -1,26 +1,16 @@
 import { Disclosure } from "@headlessui/react";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { collection, getDocs } from "firebase/firestore";
 import { useState, useEffect } from "react";
 
 import PageHeader from "../components/PageHeader";
 import PageFooter from "../components/PageFooter";
-import { db } from "../../firebase.ts";
+import { setStateData } from "../../firebaseAPI.ts"
 
 interface Faq {
   id: number,
   question: string,
   answer: string
-}
-
-async function retrieveFaqsData() {
-  const querySnapshot = await getDocs(collection(db, "faqs"));
-  const faqs: Faq[] = [];
-  querySnapshot.forEach((faq) => {
-    faqs.push(faq.data() as Faq);
-  })
-  return faqs;
 }
 
 // async function storeFaq(faq: Faq) {
@@ -52,37 +42,8 @@ const FAQ = ({id, question, answer}: Faq) => {
 
 export default function FaqPage() {
   const [faqData, setFaqData] = useState<Faq[]>([]);
-
   useEffect(() => {
-    const getCachedFaqs = () => {
-      const cachedFaqs = localStorage.getItem("faqs");
-      if (cachedFaqs) {
-        const faqs = JSON.parse(cachedFaqs);
-        return faqs;
-      }
-      return null;
-    };
-    const fetchFaqsAndCache = async () => {
-      retrieveFaqsData()
-        .then((faqs) => {
-          faqs.sort((a,b) => a.id - b.id);
-          setFaqData(faqs);
-          localStorage.setItem("faqs", JSON.stringify(faqs));
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-    }
-
-    const cachedFaqs = getCachedFaqs();
-    if (cachedFaqs) {
-      setFaqData(cachedFaqs);
-    } else {
-      fetchFaqsAndCache()
-        .catch((error) => {
-          console.error("Error fetching faqs: ", error);
-        })
-    }
+    setStateData<Faq>("faqs", (a, b) => a.id - b.id, setFaqData);
   }, [])
   return (
     <>
