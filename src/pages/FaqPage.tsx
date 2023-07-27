@@ -1,88 +1,46 @@
 import { Disclosure } from "@headlessui/react";
-import { faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { collection, getDocs, doc, setDoc } from "firebase/firestore";
+import { useState, useEffect } from "react";
 
 import PageHeader from "../components/PageHeader";
 import PageFooter from "../components/PageFooter";
+import { db } from "../../firebase.ts";
 
-interface faq {
+interface Faq {
+  id: number,
   question: string,
   answer: string
 }
 
-const faqs: faq[] = [
-  {
-    question: "When do you do hikes?",
-    answer: "On weekends, either single-day or weekend trips. We also organise tours in the holidays",
-  },
-  {
-    question: "Do you have social activities?",
-    answer: "Yes, we meet for a tea break every Friday on Queen's Lawn",
-  },
-  {
-    question: "When do you do hikes?",
-    answer: "On weekends, either single-day or weekend trips. We also organise tours in the holidays",
-  },
-  {
-    question: "Do you have social activities?",
-    answer: "Yes, we meet for a tea break every Friday on Queen's Lawn",
-  },
-  {
-    question: "When do you do hikes?",
-    answer: "On weekends, either single-day or weekend trips. We also organise tours in the holidays",
-  },
-  {
-    question: "Do you have social activities?",
-    answer: "Yes, we meet for a tea break every Friday on Queen's Lawn",
-  },
-  {
-    question: "When do you do hikes?",
-    answer: "On weekends, either single-day or weekend trips. We also organise tours in the holidays",
-  },
-  {
-    question: "Do you have social activities?",
-    answer: "Yes, we meet for a tea break every Friday on Queen's Lawn",
-  },
-  {
-    question: "When do you do hikes?",
-    answer: "On weekends, either single-day or weekend trips. We also organise tours in the holidays",
-  },
-  {
-    question: "Do you have social activities?",
-    answer: "Yes, we meet for a tea break every Friday on Queen's Lawn",
-  },
-  {
-    question: "When do you do hikes?",
-    answer: "On weekends, either single-day or weekend trips. We also organise tours in the holidays",
-  },
-  {
-    question: "Do you have social activities?",
-    answer: "Yes, we meet for a tea break every Friday on Queen's Lawn",
-  },
-  {
-    question: "When do you do hikes?",
-    answer: "On weekends, either single-day or weekend trips. We also organise tours in the holidays",
-  },
-  {
-    question: "Do you have social activities?",
-    answer: "Yes, we meet for a tea break every Friday on Queen's Lawn",
-  }
-]
+async function retrieveFaqsData() {
+  const querySnapshot = await getDocs(collection(db, "faqs"));
+  const faqs: Faq[] = [];
+  querySnapshot.forEach((faq) => {
+    faqs.push(faq.data() as Faq);
+  })
+  return faqs;
+}
 
-const FAQ = ({question, answer}: faq) => {
+async function storeFaq(faq: Faq) {
+  await setDoc(doc(db, "faqs", faq.id.toString()), faq)
+}
+
+const FAQ = ({id, question, answer}: Faq) => {
   return (
     <Disclosure>
       {({ open }) => (
         <>
-          <Disclosure.Button className="flex w-full justify-between rounded-lg bg-logoGreen-light px-4 py-2 text-left text-sm font-medium text-logoGreen-dark border border-logoGreen-dark hover:bg-logoGreen-light/70 focus:outline-none focus-visible:ring focus-visible:ring-green-500 focus-visible:ring-opacity-75">
-            <span>{question}</span>
+          <Disclosure.Button className="flex w-full justify-between rounded-lg bg-logoGreen-light px-4 py-2 text-left text-sm font-medium text-black border border-logoGreen-dark hover:bg-logoGreen-light/70 focus:outline-none focus-visible:ring focus-visible:ring-green-500 focus-visible:ring-opacity-75">
+            <span>{id.toString().concat(". ").concat(question)}</span>
             <FontAwesomeIcon icon={faChevronDown}
               className={`${
                 open ? 'rotate-180 transform' : ''
               } h-5 w-5 text-logoGreen-dark`}
             />
           </Disclosure.Button>
-          <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+          <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-700">
             {answer}
           </Disclosure.Panel>
         </>
@@ -93,21 +51,54 @@ const FAQ = ({question, answer}: faq) => {
 
 
 export default function FaqPage() {
+  const [faqData, setFaqData] = useState<Faq[]>([]);
+
+  useEffect(() => {
+    const getCachedFaqs = () => {
+      const cachedFaqs = localStorage.getItem("faqs");
+      if (cachedFaqs) {
+        const faqs = JSON.parse(cachedFaqs);
+        return faqs;
+      }
+      return null;
+    };
+    const fetchFaqsAndCache = async () => {
+      retrieveFaqsData()
+        .then((faqs) => {
+          faqs.sort((a,b) => a.id - b.id);
+          setFaqData(faqs);
+          localStorage.setItem("faqs", JSON.stringify(faqs));
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+    }
+
+    const cachedFaqs = getCachedFaqs();
+    if (cachedFaqs) {
+      setFaqData(cachedFaqs);
+    } else {
+      fetchFaqsAndCache()
+        .catch((error) => {
+          console.error("Error fetching faqs: ", error);
+        })
+    }
+  }, [])
   return (
     <>
     <PageHeader />
-    <div className={"flex flex-col justify-center items-center sm:w-1/2 mx-auto h-screen"}>
-      <h2 className={"w-full text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl px-4 lg:px-8"}>
+    <div className={"flex flex-col justify-start items-center sm:w-1/2 mx-auto h-screen sm:py-8"}>
+      <h2 className={"w-full text-3xl font-bold tracking-tight text-black sm:text-4xl px-4 lg:px-8"}>
         FAQs
       </h2>
-      <p className={"w-full font-bold tracking-tight text-gray-700 px-4 lg:px-8 pt-2"}>
+      <p className={"w-full font-bold tracking-tight text-black px-4 lg:px-8 pt-2"}>
         If you don't find the answers you need here, e-mail us at fellsoc@imperial.ac.uk
       </p>
       <div className="flex flex-col space-y-5 w-full px-4 lg:px-8 py-4 lg:py-8 h-max-screen overflow-y-auto">
-        {faqs.map((faq, index) => {
+        {faqData.map((faq, index) => {
           return (
           <div key={index}>
-            <FAQ question={faq.question} answer={faq.answer} />
+            <FAQ id={faq.id} question={faq.question} answer={faq.answer} />
           </div>)
         })}
       </div>
