@@ -10,7 +10,7 @@ export default function ArchivePage() {
   const [hikeData, setHikeData] = useState<Hike[]>([]);
 
   useEffect(() => {
-    setStateData<Hike>("archive", (a, b) => a.title.localeCompare(b.title), setHikeData)
+    setStateData<Hike>("archive", (a, b) => a.title.localeCompare(b.title), setHikeData, (a) => a)
   }, []);
   return (
     <>

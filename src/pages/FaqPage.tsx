@@ -39,7 +39,7 @@ const FAQ = ({id, question, answer}: Faq) => {
 export default function FaqPage() {
   const [faqData, setFaqData] = useState<Faq[]>([]);
   useEffect(() => {
-    setStateData<Faq>("faqs", (a, b) => a.id - b.id, setFaqData);
+    setStateData<Faq>("faqs", (a, b) => a.id - b.id, setFaqData, (a) => a);
   }, [])
   return (
     <>
