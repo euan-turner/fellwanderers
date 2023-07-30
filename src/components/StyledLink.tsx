@@ -1,6 +1,6 @@
 import React from "react";
 
-interface ButtonLinkProps {
+interface StyledLinkProps {
   href: string;
   className: string;
   children: React.ReactNode;
@@ -10,7 +10,7 @@ export default function StyledLink({
   href,
   className,
   children,
-}: ButtonLinkProps) {
+}: StyledLinkProps) {
   return (
     <a href={href} target={"_blank"} className={className}>
       {children}

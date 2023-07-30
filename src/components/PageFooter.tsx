@@ -1,7 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInstagram } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope, faBagShopping } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faBagShopping, faArrowRightToBracket } from "@fortawesome/free-solid-svg-icons";
 
+import StyledButton from "../components/StyledButton.tsx";
 import StyledLink from "../components/StyledLink.tsx";
 
 const instaLink = "https://www.instagram.com/icfellwanderers";
@@ -19,6 +20,15 @@ export default function PageFooter() {
           "flex flex-row justify-center sm:justify-end space-x-5 px-1 sm:px-2 items-center"
         }
       >
+        <StyledButton
+          className={linkStyle}
+          onClick={() => console.log("Clicked")}
+          children={
+            <div>
+              <FontAwesomeIcon icon={faArrowRightToBracket} /> Log In
+            </div>
+          }
+        />
         <StyledLink
           href={instaLink}
           className={linkStyle}
