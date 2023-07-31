@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
-import app, { auth } from "../../firebase";
+import { auth } from "../../firebase";
 
 interface LoginPopupProps {
   onClose: () => void;
@@ -17,7 +17,7 @@ export default function LoginPopup({ onClose }: LoginPopupProps) {
     .then(() => {
       onClose();
     })
-    .catch((error) => setError(error.message));
+    .catch(() => setError("Committee Sign-In Failed"));
   }
 
   return (
@@ -44,13 +44,13 @@ export default function LoginPopup({ onClose }: LoginPopupProps) {
           />
         </div>
         <button
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded"
           onClick={handleSignInWithEmailAndPassword}
         >
           Sign In
         </button>
         <button
-          className="mt-4 text-sm text-gray-500"
+          className="px-2 mt-4 text-sm text-gray-500"
           onClick={onClose}
         >
           Close
