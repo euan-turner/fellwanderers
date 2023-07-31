@@ -14,7 +14,9 @@ export default function LoginPopup({ onClose }: LoginPopupProps) {
 
   const handleSignInWithEmailAndPassword = () => {
     signInWithEmailAndPassword(auth, email, password)
-    .then(() => onClose())
+    .then(() => {
+      onClose();
+    })
     .catch((error) => setError(error.message));
   }
 

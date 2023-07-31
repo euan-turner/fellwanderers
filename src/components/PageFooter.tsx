@@ -1,8 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInstagram } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope, faBagShopping, faArrowRightToBracket } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faBagShopping, faArrowRightToBracket,  faArrowRightFromBracket} from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import { signOut } from "firebase/auth";
 
+import { auth } from "../../firebase.ts";
 import LoginPopup from "./LoginPopup.tsx";
 import StyledButton from "../components/StyledButton.tsx";
 import StyledLink from "../components/StyledLink.tsx";
@@ -12,13 +14,26 @@ const shopLink = "https://www.imperialcollegeunion.org/shop/student-groups/407";
 const mailLink = "https://mailman.ic.ac.uk/mailman/listinfo/fellwanderers";
 
 export default function PageFooter() {
-  const [showLogin, setShowLogin] = useState<boolean>(false);
+  const [showLoginPopup, setShowLoginPopup] = useState<boolean>(false);
+  const [showLoginButton, setShowLoginButton] = useState<boolean>(true);
 
   const handleLoginButtonClick = () => {
-    setShowLogin(true);
+    setShowLoginPopup(true);
   }
   const handleLoginClose = () => {
-    setShowLogin(false);
+    setShowLoginPopup(false);
+    if (auth.currentUser) {
+      setShowLoginButton(false);
+    }
+  }
+  const handleLogoutButtonClick = () => {
+    signOut(auth)
+      .then(() => {
+        setShowLoginButton(true);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      })
   }
 
   const linkStyle =
@@ -31,11 +46,14 @@ export default function PageFooter() {
           "flex flex-row justify-center sm:justify-end space-x-5 px-1 sm:px-2 items-center"
         }
       >
-        { showLogin && 
+        { 
+          showLoginPopup && 
           <LoginPopup onClose={handleLoginClose} />
         }
-        
-        <StyledButton
+
+        {
+          showLoginButton && 
+          <StyledButton
           className={linkStyle}
           onClick={handleLoginButtonClick}
           children={
@@ -43,7 +61,21 @@ export default function PageFooter() {
               <FontAwesomeIcon icon={faArrowRightToBracket} /> Log In
             </div>
           }
-        />
+          />
+        }
+        
+        {
+          !showLoginButton &&
+          <StyledButton
+          className={linkStyle}
+          onClick={handleLogoutButtonClick}
+          children={
+            <div>
+              <FontAwesomeIcon icon={faArrowRightFromBracket} /> Log Out
+            </div>
+          }
+          />
+        }
         <StyledLink
           href={instaLink}
           className={linkStyle}
