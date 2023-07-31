@@ -51,7 +51,6 @@ async function fetchCollectionAndCache<T>(dataName: string, order: Order<T>, set
 export function setCollectionState<T>(dataName: string, order: Order<T>, setCollection: SetCollection<T>, transform: TransformForEach<T>, firestoreTransform: TransformFromFirestore<T>) {
   const cachedCollection = getCachedCollection<T>(dataName, transform);
   if (cachedCollection) {
-    console.log(cachedCollection);
     setCollection(cachedCollection);
   } else {
     fetchCollectionAndCache<T>(dataName, order, setCollection, firestoreTransform)

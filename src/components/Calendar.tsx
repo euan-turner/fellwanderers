@@ -78,14 +78,15 @@ const createMonthActivities = (startDate: Date, planned: Doc<Activity>[]) => {
   return activities;
 };
 
-const today = () => {
+const monthFirst = () => {
   const date = new Date();
-  date.setHours(0, 0, 0, 0);
-  return date;
+  const res = new Date(date.getFullYear(), date.getMonth(), 1);
+  res.setHours(0, 0, 0, 0);
+  return res;
 };
 
 export default function Calendar({ activities }: CalendarProps) {
-  const [monthStart, setMonthStart] = useState<Date>(today());
+  const [monthStart, setMonthStart] = useState<Date>(monthFirst());
   const [monthActivities, setMonthActivities] = useState<Doc<Activity>[]>([]);
   const [prevDisabled, setPrevDisabled] = useState(false);
   const [nextDisabled, setNextDisabled] = useState(false);
