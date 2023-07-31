@@ -1,50 +1,62 @@
-import { collection, getDocs } from "firebase/firestore";
+import { DocumentData, collection, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
 import React from "react";
 
 type Order<T> = (arg1: T, arg2: T) => number;
-type StateSetter<T> = (value: React.SetStateAction<T[]>) => void;
-type TransformForEach<T> = (value: T) => void;
+type TransformForEach<T> = (value: T) => T;
+type TransformFromFirestore<T> = (value: DocumentData) => T;
 
-async function retrieveAllData<T>(collectionName: string) {
+export type Doc<T> = {
+  id: string,
+  data: T
+}
+type SetCollection<T> = (value: React.SetStateAction<Doc<T>[]>) => void;
+
+async function retrieveCollection<T>(collectionName: string, transform: TransformFromFirestore<T>) {
   const querySnapshot = await getDocs(collection(db, collectionName));
-  const res: T[] = [];
-  querySnapshot.forEach((item) => {
-    res.push(item.data() as T)
+  const collData: Doc<T>[] = [];
+  querySnapshot.forEach((doc) => { 
+    collData.push({
+      id: doc.id,
+      data: transform(doc.data())
+    });
   });
-  return res;
+  return collData;
 }
 
-function getCachedData<T>(cacheName: string, transform: TransformForEach<T>) {
+function getCachedCollection<T>(cacheName: string, transform: TransformForEach<T>) {
   const cachedData = localStorage.getItem(cacheName);
   if (cachedData) {
-    const data = JSON.parse(cachedData);
-    data.forEach(transform);
-    return data;
+    const docs = JSON.parse(cachedData);
+    docs.forEach((doc: Doc<T>) => {
+      doc.data = transform(doc.data)
+    });
+    return docs;
   }
   return null;
 }
 
-async function fetchDataAndCache<T>(dataName: string, order: Order<T>, setData: StateSetter<T>) {
-  retrieveAllData<T>(dataName)
-    .then((data) => {
-      data.sort(order);
-      setData(data);
-      localStorage.setItem(dataName, JSON.stringify(data));
+async function fetchCollectionAndCache<T>(dataName: string, order: Order<T>, setCollection: SetCollection<T>, transform: TransformFromFirestore<T>) {
+  retrieveCollection<T>(dataName, transform)
+    .then((docs) => {
+      docs.sort((a, b) => order(a.data, b.data));
+      setCollection(docs);
+      localStorage.setItem(dataName, JSON.stringify(docs));
     })
     .catch((error) => {
       console.error(error);
     })
 }
 
-export function setStateData<T>(dataName: string, order: Order<T>, setData: StateSetter<T>, transform: TransformForEach<T>) {
-  const cachedData = getCachedData<T>(dataName, transform);
-  if (cachedData) {
-    setData(cachedData);
+export function setCollectionState<T>(dataName: string, order: Order<T>, setCollection: SetCollection<T>, transform: TransformForEach<T>, firestoreTransform: TransformFromFirestore<T>) {
+  const cachedCollection = getCachedCollection<T>(dataName, transform);
+  if (cachedCollection) {
+    console.log(cachedCollection);
+    setCollection(cachedCollection);
   } else {
-    fetchDataAndCache<T>(dataName, order, setData)
+    fetchCollectionAndCache<T>(dataName, order, setCollection, firestoreTransform)
       .catch((error) => {
-        console.error("Error fetching ".concat(dataName).concat(": "), error);
+        console.error(error.message);
       })
   }
 }

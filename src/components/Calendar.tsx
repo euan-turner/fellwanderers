@@ -6,9 +6,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import Activity, { ActivityType } from "../types/Activity.ts";
+import { Doc } from "../../firebaseAPI.ts";
 
 interface CalendarProps {
-  activities: Activity[];
+  activities: Doc<Activity>[];
 }
 
 function colourActivity(type: ActivityType): string {
@@ -47,26 +48,29 @@ const lastSundayOfMonth = (date: Date) => {
 };
 
 // PRE: planned activities are in chronological order
-const createMonthActivities = (startDate: Date, planned: Activity[]) => {
+const createMonthActivities = (startDate: Date, planned: Doc<Activity>[]) => {
   const currDate = firstMondayOfMonth(startDate);
   const endDate = lastSundayOfMonth(startDate);
-  const monthActivities = planned.filter((activity) => {
-    const actDate = activity.date;
+  const monthActivities = planned.filter(({data}) => {
+    const actDate = data.date;
     return actDate >= currDate && actDate <= endDate;
   });
-  const activities: Activity[] = [];
+  const activities: Doc<Activity>[] = [];
   while (currDate.getTime() <= endDate.getTime()) {
     if (
       monthActivities.length > 0 &&
-      currDate.toString() === monthActivities[0].date.toString()
+      currDate.toString() === monthActivities[0].data.date.toString()
     ) {
-      activities.push(monthActivities.shift() as Activity);
+      activities.push(monthActivities.shift() as Doc<Activity>);
     } else {
       activities.push({
+        id: "",
+        data: {
         title: "",
         date: new Date(currDate),
         type: ActivityType.Blank,
         misc: "",
+        }
       });
     }
     currDate.setDate(currDate.getDate() + 1);
@@ -82,7 +86,7 @@ const today = () => {
 
 export default function Calendar({ activities }: CalendarProps) {
   const [monthStart, setMonthStart] = useState<Date>(today());
-  const [monthActivities, setMonthActivities] = useState<Activity[]>([]);
+  const [monthActivities, setMonthActivities] = useState<Doc<Activity>[]>([]);
   const [prevDisabled, setPrevDisabled] = useState(false);
   const [nextDisabled, setNextDisabled] = useState(false);
 
@@ -136,14 +140,14 @@ export default function Calendar({ activities }: CalendarProps) {
       <div className={"w-full h-full overflow-x-scroll overflow-y-scroll"}>
         <div className={"inline-flex flex-col w-[800px] min-h-max lg:w-full lg:h-[725px] "}>
           <div className={"grid grid-rows-5 grid-cols-7 gap-y-1 gap-x-0.5 lg:gap-4 p-2"}>
-            {monthActivities.map((act, actIndex) => (
+            {monthActivities.map(({data}, actIndex) => (
               <div
                 key={actIndex}
-                className={colourActivity(act.type).concat(" shadow-md p-1 lg:p-4 h-32 border border-slate-400")}
+                className={colourActivity(data.type).concat(" shadow-md p-1 lg:p-4 h-32 border border-slate-400")}
               >
-                <h3 className={"text-sm lg:text-base text-gray-700"}>{tileDateFormat.format(act.date)}</h3>
-                <h2 className={"text-base lg:text-lg font-semibold"}>{act.title}</h2>
-                <p className={"text-sm lg:text-base text-gray-500"}>{act.misc}</p>
+                <h3 className={"text-sm lg:text-base text-gray-700"}>{tileDateFormat.format(data.date)}</h3>
+                <h2 className={"text-base lg:text-lg font-semibold"}>{data.title}</h2>
+                <p className={"text-sm lg:text-base text-gray-500"}>{data.misc}</p>
               </div>
             ))}
           </div>

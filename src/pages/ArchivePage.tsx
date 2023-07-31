@@ -4,13 +4,19 @@ import HikeArchive from "../components/HikeArchive.tsx";
 import PageHeader from "../components/PageHeader";
 import PageFooter from "../components/PageFooter";
 import Hike from "../types/Hike.ts";
-import { setStateData } from "../../firebaseAPI";
+import { setCollectionState, Doc } from "../../firebaseAPI";
 
 export default function ArchivePage() {
-  const [hikeData, setHikeData] = useState<Hike[]>([]);
+  const [hikeDocs, setHikeDocs] = useState<Doc<Hike>[]>([]);
 
   useEffect(() => {
-    setStateData<Hike>("archive", (a, b) => a.title.localeCompare(b.title), setHikeData, (a) => a)
+    setCollectionState<Hike>(
+      "archive", 
+      (a, b) => a.title.localeCompare(b.title), 
+      setHikeDocs, 
+      (a) => a,
+      (a) => a as Hike
+      )
   }, []);
   return (
     <>
@@ -25,13 +31,13 @@ export default function ArchivePage() {
             the hikes we've been on in the past
           </p>
         </div>
-        {hikeData.map((hike) => (
-          <div key={hike.title}>
+        {hikeDocs.map(({data}) => (
+          <div key={data.title}>
             <HikeArchive
-              title={hike.title}
-              desc={hike.desc}
-              directory={hike.directory}
-              textLeft={hike.textLeft}
+              title={data.title}
+              desc={data.desc}
+              directory={data.directory}
+              textLeft={data.textLeft}
             />
           </div>
         ))}

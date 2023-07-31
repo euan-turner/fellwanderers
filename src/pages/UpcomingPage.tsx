@@ -3,20 +3,26 @@ import { useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
 import PageFooter from "../components/PageFooter";
 import Calendar from "../components/Calendar";
-import { setStateData } from "../../firebaseAPI"
+import { setCollectionState, Doc } from "../../firebaseAPI"
 import Activity from "../types/Activity.ts";
 
 
 export default function UpcomingPage() {
-  const [activityData, setActivityData] = useState<Activity[]>([]);
+  const [activityDocs, setActivityDocs] = useState<Doc<Activity>[]>([]);
   
   useEffect(() => {
-    setStateData<Activity>("activities", (a, b) => a.date.getTime() - b.date.getTime(), setActivityData, (a: Activity) => a.date = new Date(a.date));
+    setCollectionState<Activity>(
+      "activities", 
+      (a, b) => a.date.getTime() - b.date.getTime(), 
+      setActivityDocs, 
+      (a) => {a.date = new Date(a.date); return a},
+      (a) => {a.date = a.date.toDate(); return a as Activity}
+      );
   }, []);
   return (
     <>
       <PageHeader />
-      <Calendar activities={activityData} />
+      <Calendar activities={activityDocs} />
       <PageFooter />
     </>
   )

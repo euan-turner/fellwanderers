@@ -5,8 +5,11 @@ import { useState, useEffect } from "react";
 
 import PageHeader from "../components/PageHeader";
 import PageFooter from "../components/PageFooter";
-import { setStateData } from "../../firebaseAPI.ts"
+import { setCollectionState, Doc } from "../../firebaseAPI.ts";
 import { Faq } from "../types/Faq.ts";
+
+import { collection, addDoc } from "firebase/firestore";
+import { db, auth } from "../../firebase.ts";
 
 interface FAQProps {
   faq: Faq
@@ -23,7 +26,7 @@ const FAQ = ({ faq }: FAQProps) => {
             <FontAwesomeIcon icon={faChevronDown}
               className={`${
                 open ? 'rotate-180 transform' : ''
-              } h-5 w-5 text-logoGreen-dark`}
+              } h-5 w-5 text-black`}
             />
           </Disclosure.Button>
           <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-700">
@@ -35,11 +38,23 @@ const FAQ = ({ faq }: FAQProps) => {
   )
 }
 
+// const newIds = (faqs: Faq[]) => {
+//   faqs.forEach(async (faq) => {
+//     const docRef = await addDoc(collection(db, "faqs"), faq);
+//     console.log("New ID: ", docRef.id);
+//   })
+// }
 
 export default function FaqPage() {
-  const [faqData, setFaqData] = useState<Faq[]>([]);
+  const [faqDocs, setFaqDocs] = useState<Doc<Faq>[]>([]);
   useEffect(() => {
-    setStateData<Faq>("faqs", (a, b) => a.order - b.order, setFaqData, (a) => a);
+    setCollectionState<Faq>(
+      "faqs", 
+      (a, b) => a.order - b.order, 
+      setFaqDocs, 
+      (a) => a,
+      (a) => a as Faq
+      );
   }, [])
   return (
     <>
@@ -52,10 +67,10 @@ export default function FaqPage() {
         If you don't find the answers you need here, e-mail us at fellsoc@imperial.ac.uk
       </p>
       <div className="flex flex-col space-y-5 w-full px-4 lg:px-8 py-4 lg:py-8 h-max-screen overflow-y-auto">
-        {faqData.map((faq, index) => {
+        {faqDocs.map(({ data }, index) => {
           return (
           <div key={index}>
-            <FAQ faq={faq} />
+            <FAQ faq={data} />
           </div>)
         })}
       </div>
