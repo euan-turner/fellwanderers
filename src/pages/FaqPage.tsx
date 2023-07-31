@@ -8,18 +8,18 @@ import PageFooter from "../components/PageFooter";
 import { setStateData } from "../../firebaseAPI.ts"
 import { Faq } from "../types/Faq.ts";
 
+interface FAQProps {
+  faq: Faq
+}
 
-// async function storeFaq(faq: Faq) {
-//   await setDoc(doc(db, "faqs", faq.id.toString()), faq)
-// }
-
-const FAQ = ({id, question, answer}: Faq) => {
+const FAQ = ({ faq }: FAQProps) => {
+  const {order, question, answer} = faq;
   return (
     <Disclosure>
       {({ open }) => (
         <>
           <Disclosure.Button className="flex w-full justify-between rounded-lg bg-logoGreen-light px-4 py-2 text-left text-sm font-medium text-black border border-logoGreen-dark hover:bg-logoGreen-light/70 focus:outline-none focus-visible:ring focus-visible:ring-green-500 focus-visible:ring-opacity-75">
-            <span>{id.toString().concat(". ").concat(question)}</span>
+            <span>{order.toString().concat(". ").concat(question)}</span>
             <FontAwesomeIcon icon={faChevronDown}
               className={`${
                 open ? 'rotate-180 transform' : ''
@@ -39,7 +39,7 @@ const FAQ = ({id, question, answer}: Faq) => {
 export default function FaqPage() {
   const [faqData, setFaqData] = useState<Faq[]>([]);
   useEffect(() => {
-    setStateData<Faq>("faqs", (a, b) => a.id - b.id, setFaqData, (a) => a);
+    setStateData<Faq>("faqs", (a, b) => a.order - b.order, setFaqData, (a) => a);
   }, [])
   return (
     <>
@@ -55,7 +55,7 @@ export default function FaqPage() {
         {faqData.map((faq, index) => {
           return (
           <div key={index}>
-            <FAQ id={faq.id} question={faq.question} answer={faq.answer} />
+            <FAQ faq={faq} />
           </div>)
         })}
       </div>
