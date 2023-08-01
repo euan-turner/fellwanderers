@@ -1,4 +1,4 @@
-import { Disclosure } from "@headlessui/react";
+import { Disclosure, Tab } from "@headlessui/react";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
@@ -16,7 +16,7 @@ interface FAQProps {
   faq: Faq
 }
 
-const FAQ = ({ faq }: FAQProps) => {
+function FAQ({ faq }: FAQProps) {
   const {order, question, answer} = faq;
   return (
     <Disclosure>
@@ -37,6 +37,36 @@ const FAQ = ({ faq }: FAQProps) => {
       )}
     </Disclosure>
   )
+} 
+
+interface CommitteeUpdatesProps{
+  faqDocs: Doc<Faq>[]
+}
+
+
+function CommitteeUpdates({ faqDocs }: CommitteeUpdatesProps) {
+  const handleFaqSubmit = (faq: Faq)=>{console.log(faq)};
+  const validFaq = (faq: Faq) => {
+    const res = faq.order !== 0 && faq.question.trim() !== '' && faq.answer.trim() !== '';
+    const ret: [boolean, string | null] =  [res, res ? null : 'All fields must be populated'];
+    return ret;
+  }
+  return (
+    <Tab.Group>
+      <Tab.List>
+        <Tab>Add FAQ</Tab>
+        <Tab>Edit FAQ</Tab>
+        <Tab>Delete FAQ</Tab>
+      </Tab.List>
+      <Tab.Panels>
+        <Tab.Panel>
+          <AddFaqForm onSubmit={handleFaqSubmit} isValidFaq={validFaq} />
+        </Tab.Panel>
+        <Tab.Panel>Edit</Tab.Panel>
+        <Tab.Panel>Delete</Tab.Panel>
+      </Tab.Panels>
+    </Tab.Group>
+  )
 }
 
 // const newIds = (faqs: Faq[]) => {
@@ -50,14 +80,7 @@ export default function FaqPage() {
   const [faqDocs, setFaqDocs] = useState<Doc<Faq>[]>([]);
   const { isLoggedIn, user } = useAuth();
 
-  const handleFaqSubmit = (faq: Faq)=>{console.log(faq)};
-  const validFaq = (faq: Faq) => {
-    const res = faq.order !== 0 && faq.question.trim() !== '' && faq.answer.trim() !== '';
-    const ret: [boolean, string | null] =  [res, res ? null : 'All fields must be populated'];
-    return ret;
-  }
   useEffect(() => {
-    console.log(user);
     setCollectionState<Faq>(
       "faqs", 
       (a, b) => a.order - b.order, 
@@ -65,7 +88,7 @@ export default function FaqPage() {
       (a) => a,
       (a) => a as Faq
       );
-  }, [user])
+  }, [])
   return (
     <>
     <PageHeader />
@@ -86,7 +109,7 @@ export default function FaqPage() {
       </div>
       {
         isLoggedIn && 
-        <AddFaqForm onSubmit={handleFaqSubmit} isValidFaq={validFaq} />
+        <CommitteeUpdates faqDocs={faqDocs} />
       }
     </div>  
     <PageFooter />
