@@ -7,6 +7,7 @@ import PageHeader from "../components/PageHeader";
 import PageFooter from "../components/PageFooter";
 import { setCollectionState, Doc } from "../../firebaseAPI.ts";
 import { Faq } from "../types/Faq.ts";
+import { useAuth } from "../contexts/AuthContext.tsx";
 
 import { collection, addDoc } from "firebase/firestore";
 import { db, auth } from "../../firebase.ts";
@@ -47,7 +48,9 @@ const FAQ = ({ faq }: FAQProps) => {
 
 export default function FaqPage() {
   const [faqDocs, setFaqDocs] = useState<Doc<Faq>[]>([]);
+  const { isLoggedIn, user } = useAuth();
   useEffect(() => {
+    console.log(user);
     setCollectionState<Faq>(
       "faqs", 
       (a, b) => a.order - b.order, 
@@ -55,7 +58,7 @@ export default function FaqPage() {
       (a) => a,
       (a) => a as Faq
       );
-  }, [])
+  }, [user])
   return (
     <>
     <PageHeader />
@@ -74,8 +77,11 @@ export default function FaqPage() {
           </div>)
         })}
       </div>
-    </div>
-  
+      {
+        isLoggedIn && 
+        <p> Edit FAQs</p>
+      }
+    </div>  
     <PageFooter />
     </>
   )

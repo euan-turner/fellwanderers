@@ -5,6 +5,7 @@ import { useState } from "react";
 import { signOut } from "firebase/auth";
 
 import { auth } from "../../firebase.ts";
+import { useAuth } from "../contexts/AuthContext.tsx";
 import LoginPopup from "./LoginPopup.tsx";
 import StyledButton from "../components/StyledButton.tsx";
 import StyledLink from "../components/StyledLink.tsx";
@@ -15,22 +16,15 @@ const mailLink = "https://mailman.ic.ac.uk/mailman/listinfo/fellwanderers";
 
 export default function PageFooter() {
   const [showLoginPopup, setShowLoginPopup] = useState<boolean>(false);
-  const [showLoginButton, setShowLoginButton] = useState<boolean>(true);
-
+  const { isLoggedIn } = useAuth();
   const handleLoginButtonClick = () => {
     setShowLoginPopup(true);
   }
   const handleLoginClose = () => {
     setShowLoginPopup(false);
-    if (auth.currentUser) {
-      setShowLoginButton(false);
-    }
   }
   const handleLogoutButtonClick = () => {
     signOut(auth)
-      .then(() => {
-        setShowLoginButton(true);
-      })
       .catch((error) => {
         console.log(error.message);
       })
@@ -49,7 +43,7 @@ export default function PageFooter() {
         }
 
         {
-          showLoginButton && 
+          !isLoggedIn && 
           <StyledButton
           className={buttonStyle}
           onClick={handleLoginButtonClick}
@@ -62,7 +56,7 @@ export default function PageFooter() {
         }
         
         {
-          !showLoginButton &&
+          isLoggedIn &&
           <StyledButton
           className={buttonStyle}
           onClick={handleLogoutButtonClick}
