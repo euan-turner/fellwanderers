@@ -8,7 +8,7 @@ import PageFooter from "../components/PageFooter";
 import { setCollectionState, Doc } from "../../firebaseAPI.ts";
 import { Faq } from "../types/Faq.ts";
 import { useAuth } from "../contexts/AuthContext.tsx";
-
+import { AddFaqForm } from "../components/FaqForms.tsx";
 import { collection, addDoc } from "firebase/firestore";
 import { db, auth } from "../../firebase.ts";
 
@@ -49,6 +49,13 @@ const FAQ = ({ faq }: FAQProps) => {
 export default function FaqPage() {
   const [faqDocs, setFaqDocs] = useState<Doc<Faq>[]>([]);
   const { isLoggedIn, user } = useAuth();
+
+  const handleFaqSubmit = (faq: Faq)=>{console.log(faq)};
+  const validFaq = (faq: Faq) => {
+    const res = faq.order !== 0 && faq.question.trim() !== '' && faq.answer.trim() !== '';
+    const ret: [boolean, string | null] =  [res, res ? null : 'All fields must be populated'];
+    return ret;
+  }
   useEffect(() => {
     console.log(user);
     setCollectionState<Faq>(
@@ -79,7 +86,7 @@ export default function FaqPage() {
       </div>
       {
         isLoggedIn && 
-        <p> Edit FAQs</p>
+        <AddFaqForm onSubmit={handleFaqSubmit} isValidFaq={validFaq} />
       }
     </div>  
     <PageFooter />
