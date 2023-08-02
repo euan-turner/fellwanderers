@@ -46,13 +46,13 @@ interface CommitteeUpdatesProps{
 
 const handleAddFaqSubmit = (faq: Faq, faqDocs: Doc<Faq>[], setState: React.Dispatch<React.SetStateAction<Doc<Faq>[]>>)=>{
   const newDoc: Doc<Faq> = { id: null, data: faq};
-  if (faq.order !== faqDocs.length) {
+  if (faq.order <= faqDocs.length) {
     {/*Re-order existing docs*/}
     faqDocs.filter((doc: Doc<Faq>) => doc.data.order >= faq.order)
     .forEach((doc: Doc<Faq>) => doc.data.order++);
   }
   faqDocs.push(newDoc);
-  setState(faqDocs);
+  setState(faqDocs.sort((a, b) => a.data.order - b.data.order));
 };
 
 const isValidAddFaq = (faq: Faq): [boolean, string | null] => {
@@ -89,15 +89,35 @@ const handleEditFaqSubmit = (newFaq: Faq, oldNumber: number, faqDocs: Doc<Faq>[]
   setState(faqDocs.sort((a, b) => a.data.order - b.data.order));
 };
 
+const isValidEditFaq = (faq: Faq, num: number, faqDocs: Doc<Faq>[]): [boolean, string | null] => {
+  if (num > faqDocs.length) {
+    return [false, "Must edit existing FAQ"];
+  }
+  return isValidAddFaq(faq);
+}
+
+const handleDeleteFaqSubmit = (faqNumber: number, faqDocs: Doc<Faq>[], setState: React.Dispatch<React.SetStateAction<Doc<Faq>[]>>) => {
+  const newFaqDocs = faqDocs.filter((doc) => {return doc.data.order !== faqNumber});
+  newFaqDocs.forEach((doc) => {
+    if (doc.data.order > faqNumber) {
+      doc.data.order--;
+    }
+  })
+  setState(newFaqDocs);
+};
+
+// TODO: Check if redundant
+const isValidDeleteFaq = (faqNumber: number, faqDocs: Doc<Faq>[]): [boolean, string | null] => {
+  if (faqNumber > faqDocs.length) {
+    return [false, "Cannot delete non-existent FAQ"];
+  }
+  return [true, null];
+}
+
 function CommitteeUpdates({ faqDocs, setFaqDocs }: CommitteeUpdatesProps) {
-  const isValidEditFaq = (faq: Faq, num: number, faqDocs: Doc<Faq>[]) => {
-    console.log(num);
-    return isValidAddFaq(faq);
-  }
-  const handleDeleteFaqSubmit = (faqNumber: number, faqDocs: Doc<Faq>[], setState: React.Dispatch<React.SetStateAction<Doc<Faq>[]>>) => {console.log(faqNumber)};
-  const isValidDeleteFaq = (faqNumber: number, faqDocs: Doc<Faq>[]): [boolean, string | null] => {
-    return [true, null];
-  }
+  const baseTabStyle = "w-full rounded-md px-1 sm:px-2.5 py-2 lg:py-2.5 text-sm leading-5 text-black font-semibold " +
+  "ring-white ring-opacity-60 ring-offset-2 ring-offset-logoGreen-light " +
+  "focus:outline-none focus:ring-2 ";
   return (
     <div className={"w-full px-4 lg:px-8"}>
       <Tab.Group>
@@ -108,27 +128,21 @@ function CommitteeUpdates({ faqDocs, setFaqDocs }: CommitteeUpdatesProps) {
             >
           <Tab
                     className={({ selected }) =>
-                      "w-full rounded-md px-1 sm:px-2.5 py-2 lg:py-2.5 text-sm leading-5 text-black font-semibold " +
-                      "ring-white ring-opacity-60 ring-offset-2 ring-offset-logoGreen-light " +
-                      "focus:outline-none focus:ring-2 ".concat(
+                      baseTabStyle.concat(
                         selected ? "bg-white shadow" : "hover:bg-white/20",
                       )
                     }
                   >Add FAQ</Tab>
           <Tab
                     className={({ selected }) =>
-                      "w-full rounded-md px-1 sm:px-2.5 py-2 lg:py-2.5 text-sm leading-5 text-black font-semibold " +
-                      "ring-white ring-opacity-60 ring-offset-2 ring-offset-logoGreen-light " +
-                      "focus:outline-none focus:ring-2 ".concat(
+                      baseTabStyle.concat(
                         selected ? "bg-white shadow" : "hover:bg-white/20",
                       )
                     }
                   >Edit FAQ</Tab>
           <Tab
                     className={({ selected }) =>
-                      "w-full rounded-md px-1 sm:px-2.5 py-2 lg:py-2.5 text-sm leading-5 text-black font-semibold " +
-                      "ring-white ring-opacity-60 ring-offset-2 ring-offset-logoGreen-light " +
-                      "focus:outline-none focus:ring-2 ".concat(
+                      baseTabStyle.concat(
                         selected ? "bg-white shadow" : "hover:bg-white/20",
                       )
                     }
