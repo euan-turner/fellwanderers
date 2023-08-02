@@ -43,7 +43,7 @@ export function AddFaqForm({ onSubmit, isValidAdd, faqDocs, setState }: AddFaqFo
           <input
             type="number"
             min="1"
-            max={faqDocs.length}
+            max={faqDocs.length + 1}
             value={order}
             onChange={(e) => setOrder(parseInt(e.target.value))}
             required
@@ -110,7 +110,7 @@ export function EditFaqForm({ onSubmit, isValidEdit, faqDocs, setState}: EditFaq
       setAnswer('');
     }
   };
-
+  // TODO: Auto-populate fields with oldNumber's data
   return (
     <div className={"p-2"}>
       <form onSubmit={handleSubmit}>
@@ -121,7 +121,7 @@ export function EditFaqForm({ onSubmit, isValidEdit, faqDocs, setState}: EditFaq
           <input
             type="number"
             min="1"
-            max={faqDocs.length - 1}
+            max={faqDocs.length}
             value={oldOrder}
             onChange={(e) => setOldOrder(parseInt(e.target.value))}
             required
@@ -134,7 +134,7 @@ export function EditFaqForm({ onSubmit, isValidEdit, faqDocs, setState}: EditFaq
           <input
             type="number"
             min="1"
-            max={faqDocs.length - 1}
+            max={faqDocs.length}
             value={newOrder}
             onChange={(e) => setNewOrder(parseInt(e.target.value))}
             required
@@ -202,7 +202,7 @@ export function DeleteFaqForm({ onSubmit, isValidDelete, faqDocs, setState}: Del
             type="number"
             value={number}
             min="1"
-            max={faqDocs.length - 1}
+            max={faqDocs.length}
             onChange={(e) => setNumber(parseInt(e.target.value))}
             required
           />

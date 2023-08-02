@@ -44,15 +44,52 @@ interface CommitteeUpdatesProps{
   setFaqDocs: React.Dispatch<React.SetStateAction<Doc<Faq>[]>>;
 }
 
+const handleAddFaqSubmit = (faq: Faq, faqDocs: Doc<Faq>[], setState: React.Dispatch<React.SetStateAction<Doc<Faq>[]>>)=>{
+  const newDoc: Doc<Faq> = { id: null, data: faq};
+  if (faq.order !== faqDocs.length) {
+    {/*Re-order existing docs*/}
+    faqDocs.filter((doc: Doc<Faq>) => doc.data.order >= faq.order)
+    .forEach((doc: Doc<Faq>) => doc.data.order++);
+  }
+  faqDocs.push(newDoc);
+  setState(faqDocs);
+};
+
+const isValidAddFaq = (faq: Faq): [boolean, string | null] => {
+  if (faq.order === 0) {
+    return [false, "FAQ number cannot be 0"];
+  }
+  if (faq.question.trim() === '') {
+    return [false, "FAQ question cannot be empty"];
+  }
+  if (faq.answer.trim() === '') {
+    return [false, "FAQ answer cannot be empty"];
+  }
+  return [true, null];
+}
+
+const handleEditFaqSubmit = (newFaq: Faq, oldNumber: number, faqDocs: Doc<Faq>[], setState: React.Dispatch<React.SetStateAction<Doc<Faq>[]>>) => {
+  if (newFaq.order === oldNumber) {
+    // Just replace data in doc
+    faqDocs.forEach((doc) => {
+      if (doc.data.order === oldNumber) {
+        doc.data = newFaq;
+      }
+    })
+  } else {
+    // Replace data in doc, and swap orders
+    faqDocs.forEach((doc) => {
+      if (doc.data.order === oldNumber) {
+        doc.data = newFaq;
+      } else if (doc.data.order === newFaq.order) {
+        doc.data.order = oldNumber;
+      }
+    })
+  }
+  setState(faqDocs.sort((a, b) => a.data.order - b.data.order));
+};
 
 function CommitteeUpdates({ faqDocs, setFaqDocs }: CommitteeUpdatesProps) {
-  const handleAddFaqSubmit = (faq: Faq, faqDocs: Doc<Faq>[], setState: React.Dispatch<React.SetStateAction<Doc<Faq>[]>>)=>{console.log(faq)};
-  const isValidAddFaq = (faq: Faq) => {
-    const res = faq.order !== 0 && faq.question.trim() !== '' && faq.answer.trim() !== '';
-    const ret: [boolean, string | null] =  [res, res ? null : 'All fields must be populated'];
-    return ret;
-  }
-  const handleEditFaqSubmit = (newFaq: Faq, oldNumber: number, faqDocs: Doc<Faq>[], setState: React.Dispatch<React.SetStateAction<Doc<Faq>[]>>) => {console.log(oldNumber, newFaq)};
   const isValidEditFaq = (faq: Faq, num: number, faqDocs: Doc<Faq>[]) => {
     console.log(num);
     return isValidAddFaq(faq);
@@ -99,13 +136,13 @@ function CommitteeUpdates({ faqDocs, setFaqDocs }: CommitteeUpdatesProps) {
       </Tab.List>
       <Tab.Panels>
         <Tab.Panel>
-          <AddFaqForm onSubmit={handleAddFaqSubmit} isValidAdd={isValidAddFaq} faqDocs={faqDocs} setState={setFaqDocs}/>
+          <AddFaqForm onSubmit={handleAddFaqSubmit} isValidAdd={isValidAddFaq} faqDocs={[...faqDocs]} setState={setFaqDocs}/>
         </Tab.Panel>
         <Tab.Panel>
-          <EditFaqForm onSubmit={handleEditFaqSubmit} isValidEdit={isValidEditFaq} faqDocs={faqDocs} setState={setFaqDocs} />
+          <EditFaqForm onSubmit={handleEditFaqSubmit} isValidEdit={isValidEditFaq} faqDocs={[...faqDocs]} setState={setFaqDocs} />
         </Tab.Panel>
         <Tab.Panel>
-          <DeleteFaqForm onSubmit={handleDeleteFaqSubmit} isValidDelete={isValidDeleteFaq} faqDocs={faqDocs} setState={setFaqDocs} />
+          <DeleteFaqForm onSubmit={handleDeleteFaqSubmit} isValidDelete={isValidDeleteFaq} faqDocs={[...faqDocs]} setState={setFaqDocs} />
         </Tab.Panel>
       </Tab.Panels>
     </Tab.Group>
@@ -126,6 +163,7 @@ export default function FaqPage() {
   const { isLoggedIn } = useAuth();
 
   useEffect(() => {
+    console.log("Fetching");
     setCollectionState<Faq>(
       "faqs", 
       (a, b) => a.order - b.order, 
