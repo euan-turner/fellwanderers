@@ -1,14 +1,14 @@
 import { Disclosure, Tab } from "@headlessui/react";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import PageHeader from "../components/PageHeader";
 import PageFooter from "../components/PageFooter";
 import { setCollectionState, Doc } from "../../firebaseAPI.ts";
 import { Faq } from "../types/Faq.ts";
 import { useAuth } from "../contexts/AuthContext.tsx";
-import { AddFaqForm } from "../components/FaqForms.tsx";
+import { AddFaqForm, EditFaqForm, DeleteFaqForm } from "../components/FaqForms.tsx";
 import { collection, addDoc } from "firebase/firestore";
 import { db, auth } from "../../firebase.ts";
 
@@ -40,32 +40,77 @@ function FAQ({ faq }: FAQProps) {
 } 
 
 interface CommitteeUpdatesProps{
-  faqDocs: Doc<Faq>[]
+  faqDocs: Doc<Faq>[];
+  setFaqDocs: React.Dispatch<React.SetStateAction<Doc<Faq>[]>>;
 }
 
 
-function CommitteeUpdates({ faqDocs }: CommitteeUpdatesProps) {
-  const handleFaqSubmit = (faq: Faq)=>{console.log(faq)};
-  const validFaq = (faq: Faq) => {
+function CommitteeUpdates({ faqDocs, setFaqDocs }: CommitteeUpdatesProps) {
+  const handleAddFaqSubmit = (faq: Faq, faqDocs: Doc<Faq>[], setState: React.Dispatch<React.SetStateAction<Doc<Faq>[]>>)=>{console.log(faq)};
+  const isValidAddFaq = (faq: Faq) => {
     const res = faq.order !== 0 && faq.question.trim() !== '' && faq.answer.trim() !== '';
     const ret: [boolean, string | null] =  [res, res ? null : 'All fields must be populated'];
     return ret;
   }
+  const handleEditFaqSubmit = (newFaq: Faq, oldNumber: number, faqDocs: Doc<Faq>[], setState: React.Dispatch<React.SetStateAction<Doc<Faq>[]>>) => {console.log(oldNumber, newFaq)};
+  const isValidEditFaq = (faq: Faq, num: number, faqDocs: Doc<Faq>[]) => {
+    console.log(num);
+    return isValidAddFaq(faq);
+  }
+  const handleDeleteFaqSubmit = (faqNumber: number, faqDocs: Doc<Faq>[], setState: React.Dispatch<React.SetStateAction<Doc<Faq>[]>>) => {console.log(faqNumber)};
+  const isValidDeleteFaq = (faqNumber: number, faqDocs: Doc<Faq>[]): [boolean, string | null] => {
+    return [true, null];
+  }
   return (
-    <Tab.Group>
-      <Tab.List>
-        <Tab>Add FAQ</Tab>
-        <Tab>Edit FAQ</Tab>
-        <Tab>Delete FAQ</Tab>
+    <div className={"w-full px-4 lg:px-8"}>
+      <Tab.Group>
+        <Tab.List
+              className={
+                "max-h-12 flex lg:inline-flex w-full lg:min-w-max justify-around lg:justify-center items-center rounded-xl bg-logoGreen-light border-logoGreen-dark border py-2 px-1 lg:space-x-2"
+              }
+            >
+          <Tab
+                    className={({ selected }) =>
+                      "w-full rounded-md px-1 sm:px-2.5 py-2 lg:py-2.5 text-sm leading-5 text-black font-semibold " +
+                      "ring-white ring-opacity-60 ring-offset-2 ring-offset-logoGreen-light " +
+                      "focus:outline-none focus:ring-2 ".concat(
+                        selected ? "bg-white shadow" : "hover:bg-white/20",
+                      )
+                    }
+                  >Add FAQ</Tab>
+          <Tab
+                    className={({ selected }) =>
+                      "w-full rounded-md px-1 sm:px-2.5 py-2 lg:py-2.5 text-sm leading-5 text-black font-semibold " +
+                      "ring-white ring-opacity-60 ring-offset-2 ring-offset-logoGreen-light " +
+                      "focus:outline-none focus:ring-2 ".concat(
+                        selected ? "bg-white shadow" : "hover:bg-white/20",
+                      )
+                    }
+                  >Edit FAQ</Tab>
+          <Tab
+                    className={({ selected }) =>
+                      "w-full rounded-md px-1 sm:px-2.5 py-2 lg:py-2.5 text-sm leading-5 text-black font-semibold " +
+                      "ring-white ring-opacity-60 ring-offset-2 ring-offset-logoGreen-light " +
+                      "focus:outline-none focus:ring-2 ".concat(
+                        selected ? "bg-white shadow" : "hover:bg-white/20",
+                      )
+                    }
+                  >Delete FAQ</Tab>
       </Tab.List>
       <Tab.Panels>
         <Tab.Panel>
-          <AddFaqForm onSubmit={handleFaqSubmit} isValidFaq={validFaq} />
+          <AddFaqForm onSubmit={handleAddFaqSubmit} isValidAdd={isValidAddFaq} faqDocs={faqDocs} setState={setFaqDocs}/>
         </Tab.Panel>
-        <Tab.Panel>Edit</Tab.Panel>
-        <Tab.Panel>Delete</Tab.Panel>
+        <Tab.Panel>
+          <EditFaqForm onSubmit={handleEditFaqSubmit} isValidEdit={isValidEditFaq} faqDocs={faqDocs} setState={setFaqDocs} />
+        </Tab.Panel>
+        <Tab.Panel>
+          <DeleteFaqForm onSubmit={handleDeleteFaqSubmit} isValidDelete={isValidDeleteFaq} faqDocs={faqDocs} setState={setFaqDocs} />
+        </Tab.Panel>
       </Tab.Panels>
     </Tab.Group>
+    </div>
+    
   )
 }
 
@@ -78,7 +123,7 @@ function CommitteeUpdates({ faqDocs }: CommitteeUpdatesProps) {
 
 export default function FaqPage() {
   const [faqDocs, setFaqDocs] = useState<Doc<Faq>[]>([]);
-  const { isLoggedIn, user } = useAuth();
+  const { isLoggedIn } = useAuth();
 
   useEffect(() => {
     setCollectionState<Faq>(
@@ -109,7 +154,7 @@ export default function FaqPage() {
       </div>
       {
         isLoggedIn && 
-        <CommitteeUpdates faqDocs={faqDocs} />
+        <CommitteeUpdates faqDocs={faqDocs} setFaqDocs={setFaqDocs}/>
       }
     </div>  
     <PageFooter />

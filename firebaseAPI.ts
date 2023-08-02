@@ -7,7 +7,7 @@ type TransformForEach<T> = (value: T) => T;
 type TransformFromFirestore<T> = (value: DocumentData) => T;
 
 export type Doc<T> = {
-  id: string,
+  id: string | null,
   data: T
 }
 type SetCollection<T> = (value: React.SetStateAction<Doc<T>[]>) => void;
