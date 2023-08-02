@@ -42,6 +42,8 @@ export function AddFaqForm({ onSubmit, isValidAdd, faqDocs, setState }: AddFaqFo
           {"Number: "}
           <input
             type="number"
+            min="1"
+            max={faqDocs.length}
             value={order}
             onChange={(e) => setOrder(parseInt(e.target.value))}
             required
@@ -118,6 +120,8 @@ export function EditFaqForm({ onSubmit, isValidEdit, faqDocs, setState}: EditFaq
           {"Old Number: "}
           <input
             type="number"
+            min="1"
+            max={faqDocs.length - 1}
             value={oldOrder}
             onChange={(e) => setOldOrder(parseInt(e.target.value))}
             required
@@ -129,6 +133,8 @@ export function EditFaqForm({ onSubmit, isValidEdit, faqDocs, setState}: EditFaq
           {"New Number: "}
           <input
             type="number"
+            min="1"
+            max={faqDocs.length - 1}
             value={newOrder}
             onChange={(e) => setNewOrder(parseInt(e.target.value))}
             required
@@ -195,6 +201,8 @@ export function DeleteFaqForm({ onSubmit, isValidDelete, faqDocs, setState}: Del
           <input
             type="number"
             value={number}
+            min="1"
+            max={faqDocs.length - 1}
             onChange={(e) => setNumber(parseInt(e.target.value))}
             required
           />
