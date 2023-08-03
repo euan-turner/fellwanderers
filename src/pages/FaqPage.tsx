@@ -10,7 +10,7 @@ import { setCollectionState, Doc } from "../../firebaseAPI.ts";
 import { Faq } from "../types/Faq.ts";
 import { useAuth } from "../contexts/AuthContext.tsx";
 import { AddFaqForm, EditFaqForm, DeleteFaqForm } from "../components/FaqForms.tsx";
-import { collection, addDoc, setDoc, doc } from "firebase/firestore";
+import { collection, addDoc, setDoc, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../firebase.ts";
 
 interface FAQProps {
@@ -98,15 +98,7 @@ const isValidEditFaq = (faq: Faq, num: number, faqDocs: Doc<Faq>[]): [boolean, s
   return isValidAddFaq(faq);
 }
 
-const handleDeleteFaqSubmit = (faqNumber: number, faqDocs: Doc<Faq>[], setState: React.Dispatch<React.SetStateAction<Doc<Faq>[]>>) => {
-  const newFaqDocs = faqDocs.filter((doc) => {return doc.data.order !== faqNumber});
-  newFaqDocs.forEach((doc) => {
-    if (doc.data.order > faqNumber) {
-      doc.data.order--;
-    }
-  })
-  setState(newFaqDocs);
-};
+
 
 // TODO: Check if redundant
 const isValidDeleteFaq = (faqNumber: number, faqDocs: Doc<Faq>[]): [boolean, string | null] => {
@@ -120,6 +112,20 @@ function CommitteeUpdates({ faqDocs, setFaqDocs }: CommitteeUpdatesProps) {
   const baseTabStyle = "w-full rounded-md px-1 sm:px-2.5 py-2 lg:py-2.5 text-sm leading-5 text-black font-semibold " +
   "ring-white ring-opacity-60 ring-offset-2 ring-offset-logoGreen-light " +
   "focus:outline-none focus:ring-2 ";
+  const [idsToDelete, setIdsToDelete] = useState<(string | null)[]>([]);
+
+  const handleDeleteFaqSubmit = (faqNumber: number, faqDocs: Doc<Faq>[], setState: React.Dispatch<React.SetStateAction<Doc<Faq>[]>>) => {
+    // TODO: Need to keep track of ids to delete for firestore
+    const newFaqDocs = faqDocs.filter((doc) => {return doc.data.order !== faqNumber});
+    const id = faqDocs.filter((doc)=>{return doc.data.order === faqNumber})[0].id;
+    setIdsToDelete([...idsToDelete, id]);
+    newFaqDocs.forEach((doc) => {
+      if (doc.data.order > faqNumber) {
+        doc.data.order--;
+      }
+    })
+    setState(newFaqDocs);
+  };
 
   const handleSaveChangesClick = () => {
     // TODO: Need to handle deletion
@@ -128,6 +134,11 @@ function CommitteeUpdates({ faqDocs, setFaqDocs }: CommitteeUpdatesProps) {
         await setDoc(doc(db, "faqs", faqDoc.id), faqDoc.data);
       } else {
         await addDoc(collection(db, "faqs"), faqDoc.data);
+      }
+    });
+    idsToDelete.forEach(async (id) => {
+      if (id) {
+        await deleteDoc(doc(db, "faqs", id));
       }
     });
     alert("Saved Changes");
