@@ -130,6 +130,7 @@ export function EditFaqForm({ onSubmit, isValidEdit, faqDocs, setState}: EditFaq
         <select id={"dropdown"} value={oldOrder || ''} onChange={handleOldOptionChange}>
           <option value=""> -- Select -- </option>
           {faqDocs.map((faqDoc, index) => (
+            // TODO: See if value can be changed to id for ease
               <option key={index} value={faqDoc.data.order}>
                 {faqDoc.data.order}
               </option>

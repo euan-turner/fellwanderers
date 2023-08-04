@@ -7,7 +7,7 @@ import PageFooter from "../components/PageFooter";
 import Archive from "../types/Archive.ts";
 import { setCollectionState, Doc } from "../../firebaseAPI";
 import { useAuth } from "../contexts/AuthContext.tsx";
-import { AddArchiveForm } from "../components/ArchiveForms.tsx";
+import { AddArchiveForm, EditArchiveForm, DeleteArchiveForm } from "../components/ArchiveForms.tsx";
 
 interface CommitteeUpdatesProps {
   archiveDocs: Doc<Archive>[];
@@ -51,17 +51,27 @@ function ArchiveCommitteeUpdates({ archiveDocs, setArchiveDocs }: CommitteeUpdat
       </Tab.List> 
       <Tab.Panel>
         <AddArchiveForm 
-          onSubmit={(archive, archiveDocs, setArchiveDocs) => (console.log(archive))}
+          onSubmit={(archive) => (console.log(archive))}
           isValidAdd={() => {return [true, null]}}
           archiveDocs={archiveDocs}
           setState={setArchiveDocs}
         />
       </Tab.Panel>
       <Tab.Panel>
-        <p>Edit Archive</p>
+        <EditArchiveForm 
+          onSubmit={(newArchive: Archive) => (console.log(newArchive))}
+          isValidEdit={() => {return [true, null]}}
+          archiveDocs={archiveDocs}
+          setState={setArchiveDocs}
+        />
       </Tab.Panel>
       <Tab.Panel>
-        <p>Delete Archive</p>
+        <DeleteArchiveForm 
+          onSubmit={(title) => {console.log(title)}}
+          isValidDelete={() => {return [true, null]}}
+          archiveDocs={archiveDocs}
+          setState={setArchiveDocs}
+        />
       </Tab.Panel>
       </Tab.Group>
     </div>
