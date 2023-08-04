@@ -1,7 +1,7 @@
 import ImageSlideshow from "./ImageSlideshow.tsx";
-import Hike from "../types/Hike.ts";
+import Archive from "../types/Archive.ts";
 
-export default function HikeArchive(hike: Hike) {
+export default function HikeArchive(hike: Archive) {
   const style =
     "h-full w-full flex rounded-md border-4 border-logoGreen-dark flex-col ".concat(
       hike.textLeft ? "sm:flex-row" : "sm:flex-row-reverse",

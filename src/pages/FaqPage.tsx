@@ -98,8 +98,6 @@ const isValidEditFaq = (faq: Faq, num: number, faqDocs: Doc<Faq>[]): [boolean, s
   return isValidAddFaq(faq);
 }
 
-
-
 // TODO: Check if redundant
 const isValidDeleteFaq = (faqNumber: number, faqDocs: Doc<Faq>[]): [boolean, string | null] => {
   if (faqNumber > faqDocs.length) {
@@ -108,7 +106,7 @@ const isValidDeleteFaq = (faqNumber: number, faqDocs: Doc<Faq>[]): [boolean, str
   return [true, null];
 }
 
-function CommitteeUpdates({ faqDocs, setFaqDocs }: CommitteeUpdatesProps) {
+function FaqCommitteeUpdates({ faqDocs, setFaqDocs }: CommitteeUpdatesProps) {
   const baseTabStyle = "w-full rounded-md px-1 sm:px-2.5 py-2 lg:py-2.5 text-sm leading-5 text-black font-semibold " +
   "ring-white ring-opacity-60 ring-offset-2 ring-offset-logoGreen-light " +
   "focus:outline-none focus:ring-2 ";
@@ -215,6 +213,10 @@ export default function FaqPage() {
       <p className={"w-full font-bold tracking-tight text-black px-4 lg:px-8 pt-2"}>
         If you don't find the answers you need here, e-mail us at fellsoc@imperial.ac.uk
       </p>
+      {
+        isLoggedIn && 
+        <FaqCommitteeUpdates faqDocs={faqDocs} setFaqDocs={setFaqDocs}/>
+      }
       <div className="flex flex-col space-y-5 w-full px-4 lg:px-8 py-4 lg:py-8 h-max-screen overflow-y-auto">
         {faqDocs.map(({ data }, index) => {
           return (
@@ -223,10 +225,6 @@ export default function FaqPage() {
           </div>)
         })}
       </div>
-      {
-        isLoggedIn && 
-        <CommitteeUpdates faqDocs={faqDocs} setFaqDocs={setFaqDocs}/>
-      }
     </div>  
     <PageFooter />
     </>

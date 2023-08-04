@@ -73,7 +73,8 @@ export function AddFaqForm({ onSubmit, isValidAdd, faqDocs, setState }: AddFaqFo
           />
         </label>
       </div>
-      <button type="submit" className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border text-xs sm:text-sm font-semibold rounded-md no-underline hover:bg-green-900/60"}>Submit</button>
+      <button 
+      type="submit" className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border text-xs sm:text-sm font-semibold rounded-md no-underline hover:bg-green-900/60"}>Submit</button>
     </form>
   </div>
   )
