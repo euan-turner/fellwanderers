@@ -5,20 +5,90 @@ import HikeArchive from "../components/HikeArchive.tsx";
 import PageHeader from "../components/PageHeader";
 import PageFooter from "../components/PageFooter";
 import Archive from "../types/Archive.ts";
+import StyledButton from "../components/StyledButton.tsx";
 import { setCollectionState, Doc } from "../../firebaseAPI";
 import { useAuth } from "../contexts/AuthContext.tsx";
 import { AddArchiveForm, EditArchiveForm, DeleteArchiveForm } from "../components/ArchiveForms.tsx";
-
+import { storage, db } from "../../firebase.ts";
+import { ref, uploadBytes } from "firebase/storage";
+import { doc, addDoc, collection, deleteDoc } from "firebase/firestore";
 interface CommitteeUpdatesProps {
   archiveDocs: Doc<Archive>[];
   setArchiveDocs: React.Dispatch<React.SetStateAction<Doc<Archive>[]>>;
+}
+
+const handleAddArchiveSubmit = (archive: Archive, images: FileList, archiveDocs: Doc<Archive>[], setState: React.Dispatch<React.SetStateAction<Doc<Archive>[]>>) => {
+  const handleUpload = () => {
+    if (images) {
+      
+      const storageRef = ref(storage, archive.directory);
+
+      for (let i = 0; i < images.length; i++) {
+        const file = images[i];
+        console.log(file);
+        const childRef = ref(storageRef, `${file.name}`);
+        uploadBytes(childRef, file)
+          .catch((error) => {
+            console.error('Error uploading file:', error);
+          }
+        );
+      }
+    }
+  }
+  const newDoc: Doc<Archive> = { id: null, data: archive };
+  if (archive.order <= archiveDocs.length) {
+    archiveDocs.filter((doc) => doc.data.order >= archive.order)
+      .forEach((doc) => doc.data.order++);
+  }
+  archiveDocs.push(newDoc);
+  setState(archiveDocs.sort((a, b) => a.data.order - b.data.order));
+  handleUpload();
+}
+
+const isValidAddArchive = (archive: Archive, selectedFiles: FileList | null): [boolean, string | null] => {
+  if (!selectedFiles) {
+    return [false, "No images selected"];
+  }
+  if (archive.order === 0) {
+    return [false, "Archive number cannot be 0"];
+  }
+  if (archive.title.trim() === '') {
+    return [false, "Archive title cannot be empty"];
+  }
+  if (archive.desc.trim() === '') {
+    return [false, "Archive description cannot be empty"];
+  }
+  if (archive.directory.trimEnd() === '') {
+    return [false, "Archive directory empty, message Euan"];
+  }
+  return [true, null];
 }
 
 function ArchiveCommitteeUpdates({ archiveDocs, setArchiveDocs }: CommitteeUpdatesProps) {
   const baseTabStyle = "w-full rounded-md px-1 sm:px-2.5 py-2 lg:py-2.5 text-sm leading-5 text-black font-semibold " +
   "ring-white ring-opacity-60 ring-offset-2 ring-offset-logoGreen-light " +
   "focus:outline-none focus:ring-2 ";
-  // const [idsToDelete, setIdsToDelete] = useState<(string | null)[]>([]);
+  const [idsToDelete, setIdsToDelete] = useState<(string | null)[]>([]);
+  
+  const handleSaveChangesClick = () => {
+    archiveDocs.forEach(async (archiveDoc) => {
+      console.log(archiveDoc);
+      if (archiveDoc.id) {
+        console.log("ID");
+      } else {
+        await addDoc(collection(db, "archive"), archiveDoc.data);
+      }
+    });
+    idsToDelete.forEach(async (id) => {
+      if (id) {
+        await deleteDoc(doc(db, "archive", id));
+        // TODO: Delete storage directory as well
+      }
+    });
+    alert("Saved Changes");
+    localStorage.setItem("archive", JSON.stringify(archiveDocs));
+  }
+
   return (
     <div>
       <Tab.Group>
@@ -51,8 +121,8 @@ function ArchiveCommitteeUpdates({ archiveDocs, setArchiveDocs }: CommitteeUpdat
       </Tab.List> 
       <Tab.Panel>
         <AddArchiveForm 
-          onSubmit={(archive) => (console.log(archive))}
-          isValidAdd={() => {return [true, null]}}
+          onSubmit={handleAddArchiveSubmit}
+          isValidAdd={isValidAddArchive}
           archiveDocs={archiveDocs}
           setState={setArchiveDocs}
         />
@@ -74,6 +144,7 @@ function ArchiveCommitteeUpdates({ archiveDocs, setArchiveDocs }: CommitteeUpdat
         />
       </Tab.Panel>
       </Tab.Group>
+      <StyledButton className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border text-xs sm:text-sm font-semibold rounded-md no-underline hover:bg-green-900/60"} children={<p>Save Changes</p>} onClick={handleSaveChangesClick} />
     </div>
   )
 

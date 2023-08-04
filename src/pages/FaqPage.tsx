@@ -126,7 +126,6 @@ function FaqCommitteeUpdates({ faqDocs, setFaqDocs }: CommitteeUpdatesProps) {
   };
 
   const handleSaveChangesClick = () => {
-    // TODO: Need to handle deletion
     faqDocs.forEach(async (faqDoc) => {
       if (faqDoc.id) {
         await setDoc(doc(db, "faqs", faqDoc.id), faqDoc.data);

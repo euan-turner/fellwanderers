@@ -5,10 +5,10 @@ import { storage } from "../../firebase";
 import { uploadBytes, ref } from "firebase/storage";
 
 type SetArchiveDocState = React.Dispatch<React.SetStateAction<Doc<Archive>[]>>;
-type AddArchiveFormSubmit = (archive: Archive, archiveDocs: Doc<Archive>[], setState: SetArchiveDocState) => void;
+type AddArchiveFormSubmit = (archive: Archive, images: FileList, archiveDocs: Doc<Archive>[], setState: SetArchiveDocState) => void;
 interface AddArchiveFormProps {
   onSubmit: AddArchiveFormSubmit;
-  isValidAdd: (archive: Archive) => [boolean, string | null];
+  isValidAdd: (archive: Archive, selectedList: FileList | null) => [boolean, string | null];
   archiveDocs: Doc<Archive>[];
   setState: SetArchiveDocState;
 }
@@ -20,7 +20,7 @@ export function AddArchiveForm({ onSubmit, isValidAdd, archiveDocs, setState}: A
   const [order, setOrder] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
-  const folderName = () => 'images/archive/${title}';
+  const folderName = () => `images/archive/${title}`;
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -29,36 +29,17 @@ export function AddArchiveForm({ onSubmit, isValidAdd, archiveDocs, setState}: A
     }
   };
 
-  const handleUpload = () => {
-    if (selectedFiles) {
-      
-      const storageRef = ref(storage, folderName());
-
-      for (let i = 0; i < selectedFiles.length; i++) {
-        const file = selectedFiles[i];
-        const childRef = ref(storageRef, '${file.name}');
-        uploadBytes(childRef, file)
-          .catch((error) => {
-            console.error('Error uploading file:', error);
-          }
-        );
-      }
-    }
-  }
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const archive: Archive = {
       title, desc, directory: folderName(), order
     };
+    console.log(archive);
 
-    const [isValid, err] = isValidAdd(archive);
+    const [isValid, err] = isValidAdd(archive, selectedFiles);
     setError(err);
     if (isValid) {
-      // wrap handleUpload inside onSubmit, or use here
-      // really need to do it in the firebaseAPI
-      handleUpload();
-      onSubmit(archive, archiveDocs, setState);
+      onSubmit(archive, selectedFiles as FileList, archiveDocs, setState);
       setOrder(0);
       setTitle('');
       setDesc('');
@@ -114,6 +95,7 @@ export function AddArchiveForm({ onSubmit, isValidAdd, archiveDocs, setState}: A
             />
           </label>
         </div>
+        <button type="submit" className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border text-xs sm:text-sm font-semibold rounded-md no-underline hover:bg-green-900/60"}>Submit</button>
       </form>
     </div>
   )
