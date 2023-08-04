@@ -4,7 +4,7 @@ import Archive from "../types/Archive.ts";
 export default function HikeArchive(archive: Archive) {
   const style =
     "h-full w-full flex rounded-md border-4 border-logoGreen-dark flex-col ".concat(
-      archive.textLeft ? "sm:flex-row" : "sm:flex-row-reverse",
+      (archive.order % 2 == 0) ? "sm:flex-row" : "sm:flex-row-reverse",
     );
   return (
     <div className={"h-[32rem] px-4 lg:px-10 py-5"}>

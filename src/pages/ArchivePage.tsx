@@ -109,7 +109,6 @@ export default function ArchivePage() {
               title={data.title}
               desc={data.desc}
               directory={data.directory}
-              textLeft={data.textLeft}
               order={data.order}
             />
           </div>
