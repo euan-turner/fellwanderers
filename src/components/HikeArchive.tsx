@@ -1,10 +1,10 @@
 import ImageSlideshow from "./ImageSlideshow.tsx";
 import Archive from "../types/Archive.ts";
 
-export default function HikeArchive(hike: Archive) {
+export default function HikeArchive(archive: Archive) {
   const style =
     "h-full w-full flex rounded-md border-4 border-logoGreen-dark flex-col ".concat(
-      hike.textLeft ? "sm:flex-row" : "sm:flex-row-reverse",
+      archive.textLeft ? "sm:flex-row" : "sm:flex-row-reverse",
     );
   return (
     <div className={"h-[32rem] px-4 lg:px-10 py-5"}>
@@ -15,12 +15,12 @@ export default function HikeArchive(hike: Archive) {
               "sticky bg-white bg-opacity-95 top-0 text-xl lg:text-3xl font-bold py-2"
             }
           >
-            {hike.title}
+            {archive.title}
           </h1>
-          <p className={"text-sm lg:text-base"}>{hike.desc}</p>
+          <p className={"text-sm lg:text-base"}>{archive.desc}</p>
         </div>
         <div className={"flex-1 h-full"}>
-          <ImageSlideshow directory={hike.directory} />
+          <ImageSlideshow directory={archive.directory} />
         </div>
       </div>
     </div>

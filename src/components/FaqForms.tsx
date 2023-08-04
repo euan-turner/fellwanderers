@@ -111,36 +111,45 @@ export function EditFaqForm({ onSubmit, isValidEdit, faqDocs, setState}: EditFaq
       setAnswer('');
     }
   };
+
+  const handleOldOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setOldOrder(parseInt(e.target.value, 10));
+  }
+  const handleNewOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setNewOrder(parseInt(e.target.value, 10));
+  }
   // TODO: Auto-populate fields with oldNumber's data
   return (
     <div className={"p-2"}>
       <form onSubmit={handleSubmit}>
       {error && <div className={"text-red-500"}>{error}</div>}
       <div>
-        <label className={"block mb-2"}>
-          {"Old Number: "}
-          <input
-            type="number"
-            min="1"
-            max={faqDocs.length}
-            value={oldOrder}
-            onChange={(e) => setOldOrder(parseInt(e.target.value))}
-            required
-          />
+        <label htmlFor={"dropdown"}  className={"block mb-2"}>
+          {"Select FAQ: "}
         </label>
+        <select id={"dropdown"} value={oldOrder || ''} onChange={handleOldOptionChange}>
+          <option value=""> -- Select -- </option>
+          {faqDocs.map((faqDoc, index) => (
+              <option key={index} value={faqDoc.data.order}>
+                {faqDoc.data.order}
+              </option>
+          ))
+          }
+        </select>
       </div>
       <div>
-        <label className={"block mb-2"}>
+        <label htmlFor={"dropdown"}  className={"block mb-2"}>
           {"New Number: "}
-          <input
-            type="number"
-            min="1"
-            max={faqDocs.length}
-            value={newOrder}
-            onChange={(e) => setNewOrder(parseInt(e.target.value))}
-            required
-          />
         </label>
+        <select id={"dropdown"} value={newOrder || ''} onChange={handleNewOptionChange}>
+          <option value=""> -- Select -- </option>
+          {faqDocs.map((faqDoc, index) => (
+              <option key={index} value={faqDoc.data.order}>
+                {faqDoc.data.order}
+              </option>
+          ))
+          }
+        </select>
       </div>
       <div>
         <label className={"block mb-2"}>
@@ -192,22 +201,26 @@ export function DeleteFaqForm({ onSubmit, isValidDelete, faqDocs, setState}: Del
       setNumber(0);
     }
   };
+  const handleOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setNumber(parseInt(e.target.value, 10));
+  }
   return (
     <div className={"p-2"}>
       <form onSubmit={handleSubmit}>
       {error && <div className={"text-red-500"}>{error}</div>}
       <div>
-        <label className={"block mb-2"}>
-          {"Number: "}
-          <input
-            type="number"
-            value={number}
-            min="1"
-            max={faqDocs.length}
-            onChange={(e) => setNumber(parseInt(e.target.value))}
-            required
-          />
+        <label htmlFor={"dropdown"}  className={"block mb-2"}>
+          {"Select Number: "}
         </label>
+        <select id={"dropdown"} value={number || ''} onChange={handleOptionChange}>
+          <option value=""> -- Select -- </option>
+          {faqDocs.map((faqDoc, index) => (
+              <option key={index} value={faqDoc.data.order}>
+                {faqDoc.data.order}
+              </option>
+          ))
+          }
+        </select>
       </div>
       <button type="submit" className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border text-xs sm:text-sm font-semibold rounded-md no-underline hover:bg-green-900/60"}>Submit</button>
     </form>
