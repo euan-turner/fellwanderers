@@ -12,6 +12,8 @@ import { AddArchiveForm, EditArchiveForm, DeleteArchiveForm } from "../component
 import { storage, db } from "../../firebase.ts";
 import { ref, uploadBytes, deleteObject, listAll } from "firebase/storage";
 import { doc, addDoc, collection, deleteDoc, setDoc } from "firebase/firestore";
+
+
 interface CommitteeUpdatesProps {
   archiveDocs: Doc<Archive>[];
   setArchiveDocs: React.Dispatch<React.SetStateAction<Doc<Archive>[]>>;
@@ -129,7 +131,8 @@ function ArchiveCommitteeUpdates({ archiveDocs, setArchiveDocs }: CommitteeUpdat
       if (archiveDoc.id) {
         await setDoc(doc(db, "archive", archiveDoc.id), archiveDoc.data);
       } else {
-        await addDoc(collection(db, "archive"), archiveDoc.data);
+        const docRef = await addDoc(collection(db, "archive"), archiveDoc.data);
+        archiveDoc.id = docRef.id;
       }
     });
     docsToDelete.forEach(async ({data, id}) => {

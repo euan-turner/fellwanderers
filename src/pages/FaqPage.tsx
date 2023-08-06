@@ -129,7 +129,8 @@ function FaqCommitteeUpdates({ faqDocs, setFaqDocs }: CommitteeUpdatesProps) {
       if (faqDoc.id) {
         await setDoc(doc(db, "faqs", faqDoc.id), faqDoc.data);
       } else {
-        await addDoc(collection(db, "faqs"), faqDoc.data);
+        const docRef = await addDoc(collection(db, "faqs"), faqDoc.data);
+        faqDoc.id = docRef.id;
       }
     });
     idsToDelete.forEach(async (id) => {
