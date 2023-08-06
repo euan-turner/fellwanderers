@@ -81,6 +81,19 @@ export function AddArchiveForm({ onSubmit, isValidAdd, archiveDocs, setState}: A
               onChange={handleFileChange}
             />
           </label>
+          { /* Display the selected files */ }
+          { selectedFiles && selectedFiles.length > 0 && (
+            <div>
+              <h3>Selected Files:</h3>
+              <ul>
+                {
+                  Array.from(selectedFiles).map((file, index) => (
+                    <li key={index}>{file.name}</li>
+                  ))
+                }
+              </ul>  
+            </div>
+          )}
         </div>
         <div>
           <label className={"block mb-2"}>

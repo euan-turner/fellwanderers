@@ -20,6 +20,7 @@ interface CommitteeUpdatesProps {
 }
 
 const handleAddArchiveSubmit = (archive: Archive, images: FileList, archiveDocs: Doc<Archive>[], setState: React.Dispatch<React.SetStateAction<Doc<Archive>[]>>) => {
+  console.log(images);
   const handleUpload = () => {
     if (images) {
       
@@ -27,7 +28,6 @@ const handleAddArchiveSubmit = (archive: Archive, images: FileList, archiveDocs:
 
       for (let i = 0; i < images.length; i++) {
         const file = images[i];
-        console.log(file);
         const childRef = ref(storageRef, `${file.name}`);
         uploadBytes(childRef, file)
           .catch((error) => {
@@ -114,9 +114,7 @@ function ArchiveCommitteeUpdates({ archiveDocs, setArchiveDocs }: CommitteeUpdat
   const handleDeleteArchiveSubmit = (title: string, archiveDocs: Doc<Archive>[], setState: React.Dispatch<React.SetStateAction<Doc<Archive>[]>>) => {
     const newArchiveDocs = archiveDocs.filter((doc) => doc.data.title !== title);
     const oldDoc = archiveDocs.filter((doc) => doc.data.title === title)[0];
-    const toDelete = [...docsToDelete, oldDoc];
-    console.log(toDelete);
-    setDocsToDelete(toDelete);
+    setDocsToDelete([...docsToDelete, oldDoc]);
     newArchiveDocs.forEach((doc) => {
       if (doc.data.order > oldDoc.data.order) {
         doc.data.order--;
@@ -127,7 +125,7 @@ function ArchiveCommitteeUpdates({ archiveDocs, setArchiveDocs }: CommitteeUpdat
 
   const handleSaveChangesClick = () => {
     archiveDocs.forEach(async (archiveDoc) => {
-      console.log(archiveDoc);
+      console.log("Saving: ", archiveDoc);
       if (archiveDoc.id) {
         await setDoc(doc(db, "archive", archiveDoc.id), archiveDoc.data);
       } else {
@@ -137,7 +135,7 @@ function ArchiveCommitteeUpdates({ archiveDocs, setArchiveDocs }: CommitteeUpdat
     });
     docsToDelete.forEach(async ({data, id}) => {
       if (id) {
-        console.log(id, data);
+        console.log("Deleting :", id, data);
         await deleteDoc(doc(db, "archive", id));
         try {
           const bucket = ref(storage, data.directory);
@@ -248,7 +246,7 @@ export default function ArchivePage() {
           isLoggedIn && 
           <div className={"px-4 lg:px-10 pt-5"}>
             <ArchiveCommitteeUpdates 
-              archiveDocs={archiveDocs}
+              archiveDocs={[...archiveDocs]}
               setArchiveDocs={setArchiveDocs}
             />
           </div>

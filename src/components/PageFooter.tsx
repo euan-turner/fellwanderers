@@ -26,7 +26,7 @@ export default function PageFooter() {
   const handleLogoutButtonClick = () => {
     signOut(auth)
       .catch((error) => {
-        console.log(error.message);
+        console.error(error.message);
       })
   }
 
