@@ -113,9 +113,8 @@ function FaqCommitteeUpdates({ faqDocs, setFaqDocs }: CommitteeUpdatesProps) {
   const [idsToDelete, setIdsToDelete] = useState<(string | null)[]>([]);
 
   const handleDeleteFaqSubmit = (faqNumber: number, faqDocs: Doc<Faq>[], setState: React.Dispatch<React.SetStateAction<Doc<Faq>[]>>) => {
-    // TODO: Need to keep track of ids to delete for firestore
-    const newFaqDocs = faqDocs.filter((doc) => {return doc.data.order !== faqNumber});
-    const id = faqDocs.filter((doc)=>{return doc.data.order === faqNumber})[0].id;
+    const newFaqDocs = faqDocs.filter((doc) => doc.data.order !== faqNumber);
+    const id = faqDocs.filter((doc) => doc.data.order === faqNumber)[0].id;
     setIdsToDelete([...idsToDelete, id]);
     newFaqDocs.forEach((doc) => {
       if (doc.data.order > faqNumber) {

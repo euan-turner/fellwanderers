@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Tab } from "@headlessui/react";
 
 import HikeArchive from "../components/HikeArchive.tsx";
@@ -10,8 +10,8 @@ import { setCollectionState, Doc } from "../../firebaseAPI";
 import { useAuth } from "../contexts/AuthContext.tsx";
 import { AddArchiveForm, EditArchiveForm, DeleteArchiveForm } from "../components/ArchiveForms.tsx";
 import { storage, db } from "../../firebase.ts";
-import { ref, uploadBytes } from "firebase/storage";
-import { doc, addDoc, collection, deleteDoc } from "firebase/firestore";
+import { ref, uploadBytes, deleteObject, listAll } from "firebase/storage";
+import { doc, addDoc, collection, deleteDoc, setDoc } from "firebase/firestore";
 interface CommitteeUpdatesProps {
   archiveDocs: Doc<Archive>[];
   setArchiveDocs: React.Dispatch<React.SetStateAction<Doc<Archive>[]>>;
@@ -64,30 +64,96 @@ const isValidAddArchive = (archive: Archive, selectedFiles: FileList | null): [b
   return [true, null];
 }
 
+const handleEditArchiveSubmit = (newArchive: Archive, oldOrder: number, archiveDocs: Doc<Archive>[], setState: React.Dispatch<React.SetStateAction<Doc<Archive>[]>>) => {
+  const oldDoc = archiveDocs.filter((doc) => doc.data.order === oldOrder)[0];
+  oldDoc.data = newArchive;
+  if (newArchive.order !== oldOrder) {
+    archiveDocs.forEach((doc) => {
+      if (doc.data.order === newArchive.order) {
+        doc.data.order = oldOrder;
+      }
+    })
+  }
+  setState(archiveDocs.sort((a, b) => a.data.order - b.data.order));
+}
+
+const isValidEditArchive = (newArchive: Archive, order: number, archiveDocs: Doc<Archive>[]): [boolean, string | null] => {
+  if (order > archiveDocs.length) {
+    return [false, "Must edit existing archive"];
+  }
+  if (newArchive.order === 0) {
+    return [false, "Archive number cannot be 0"];
+  }
+  if (newArchive.title.trim() === '') {
+    return [false, "Archive title cannot be empty"];
+  }
+  if (newArchive.desc.trim() === '') {
+    return [false, "Archive description cannot be empty"];
+  }
+  if (newArchive.directory.trimEnd() === '') {
+    return [false, "Archive directory empty, message Euan"];
+  }
+  return [true, null];
+}
+
+const isValidDeleteArchive = (title: string, archiveDocs: Doc<Archive>[]): [boolean, string | null] => {
+  if (archiveDocs.some((doc) => doc.data.title === title)) {
+    return [true, null];
+  }
+  return [false, "Cannot delete non-existent archive"];
+}
+
 function ArchiveCommitteeUpdates({ archiveDocs, setArchiveDocs }: CommitteeUpdatesProps) {
   const baseTabStyle = "w-full rounded-md px-1 sm:px-2.5 py-2 lg:py-2.5 text-sm leading-5 text-black font-semibold " +
   "ring-white ring-opacity-60 ring-offset-2 ring-offset-logoGreen-light " +
   "focus:outline-none focus:ring-2 ";
-  const [idsToDelete, setIdsToDelete] = useState<(string | null)[]>([]);
+  const [docsToDelete, setDocsToDelete] = useState<Doc<Archive>[]>([]);
   
+  const handleDeleteArchiveSubmit = (title: string, archiveDocs: Doc<Archive>[], setState: React.Dispatch<React.SetStateAction<Doc<Archive>[]>>) => {
+    const newArchiveDocs = archiveDocs.filter((doc) => doc.data.title !== title);
+    const oldDoc = archiveDocs.filter((doc) => doc.data.title === title)[0];
+    const toDelete = [...docsToDelete, oldDoc];
+    console.log(toDelete);
+    setDocsToDelete(toDelete);
+    newArchiveDocs.forEach((doc) => {
+      if (doc.data.order > oldDoc.data.order) {
+        doc.data.order--;
+      }
+    })
+    setState(newArchiveDocs);
+  }
+
   const handleSaveChangesClick = () => {
     archiveDocs.forEach(async (archiveDoc) => {
       console.log(archiveDoc);
       if (archiveDoc.id) {
-        console.log("ID");
+        await setDoc(doc(db, "archive", archiveDoc.id), archiveDoc.data);
       } else {
         await addDoc(collection(db, "archive"), archiveDoc.data);
       }
     });
-    idsToDelete.forEach(async (id) => {
+    docsToDelete.forEach(async ({data, id}) => {
       if (id) {
+        console.log(id, data);
         await deleteDoc(doc(db, "archive", id));
-        // TODO: Delete storage directory as well
+        try {
+          const bucket = ref(storage, data.directory);
+          const files = await listAll(bucket);
+          await Promise.all(files.items.map((object) => deleteObject(object)));
+        } catch (error) {
+          console.error("Error deleting files: ", error);
+        }
       }
     });
     alert("Saved Changes");
+    // TODO: Need to deal with local storage issues
+    // Probably set it with setCollectionState
     localStorage.setItem("archive", JSON.stringify(archiveDocs));
   }
+
+  useEffect(() => {
+    console.log("Updated: ", docsToDelete)
+  }, [docsToDelete]);
 
   return (
     <div>
@@ -129,16 +195,16 @@ function ArchiveCommitteeUpdates({ archiveDocs, setArchiveDocs }: CommitteeUpdat
       </Tab.Panel>
       <Tab.Panel>
         <EditArchiveForm 
-          onSubmit={(newArchive: Archive) => (console.log(newArchive))}
-          isValidEdit={() => {return [true, null]}}
+          onSubmit={handleEditArchiveSubmit}
+          isValidEdit={isValidEditArchive}
           archiveDocs={archiveDocs}
           setState={setArchiveDocs}
         />
       </Tab.Panel>
       <Tab.Panel>
         <DeleteArchiveForm 
-          onSubmit={(title) => {console.log(title)}}
-          isValidDelete={() => {return [true, null]}}
+          onSubmit={handleDeleteArchiveSubmit}
+          isValidDelete={isValidDeleteArchive}
           archiveDocs={archiveDocs}
           setState={setArchiveDocs}
         />

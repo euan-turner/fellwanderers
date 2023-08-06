@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import Archive from "../types/Archive";
 import { Doc } from "../../firebaseAPI";
-import { storage } from "../../firebase";
-import { uploadBytes, ref } from "firebase/storage";
+
 
 type SetArchiveDocState = React.Dispatch<React.SetStateAction<Doc<Archive>[]>>;
 type AddArchiveFormSubmit = (archive: Archive, images: FileList, archiveDocs: Doc<Archive>[], setState: SetArchiveDocState) => void;
@@ -13,6 +12,7 @@ interface AddArchiveFormProps {
   setState: SetArchiveDocState;
 }
 
+// TODO: Support multiple images
 export function AddArchiveForm({ onSubmit, isValidAdd, archiveDocs, setState}: AddArchiveFormProps) {
   const [title, setTitle] = useState('');
   const [desc, setDesc] = useState('');
@@ -117,7 +117,6 @@ export function EditArchiveForm({ onSubmit, isValidEdit, archiveDocs, setState}:
   const [error, setError] = useState<string | null>(null);
   // Work out how to edit images, will likely need to save as we go
 
-  // TODO: Remove textLeft from Archive
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const oldArchive = archiveDocs.filter((doc) => {return doc.data.title === oldTitle})[0];
@@ -195,6 +194,7 @@ export function EditArchiveForm({ onSubmit, isValidEdit, archiveDocs, setState}:
           }
         </select>
       </div>
+      <button type="submit" className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border text-xs sm:text-sm font-semibold rounded-md no-underline hover:bg-green-900/60"}>Submit</button>
       </form>
     </div>
   )
