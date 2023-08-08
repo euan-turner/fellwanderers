@@ -33,8 +33,6 @@ export function AddArchiveForm({ onSubmit, isValidAdd, archiveDocs, setState}: A
     const archive: Archive = {
       title, desc, directory: folderName(), order
     };
-    console.log(archive);
-
     const [isValid, err] = isValidAdd(archive, selectedFiles);
     setError(err);
     if (isValid) {

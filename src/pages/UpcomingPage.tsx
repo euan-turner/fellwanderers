@@ -22,7 +22,7 @@ export default function UpcomingPage() {
   return (
     <>
       <PageHeader />
-      <Calendar activities={activityDocs} />
+      <Calendar activities={[...activityDocs]} setActivities={setActivityDocs}/>
       <PageFooter />
     </>
   )

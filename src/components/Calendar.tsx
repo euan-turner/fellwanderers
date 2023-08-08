@@ -1,15 +1,21 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faChevronRight,
+  faPlus,
+  faTrashCan
 } from "@fortawesome/free-solid-svg-icons";
 
 import Activity, { ActivityType } from "../types/Activity.ts";
 import { Doc } from "../../firebaseAPI.ts";
+import { useAuth } from "../contexts/AuthContext.tsx";
+import StyledButton from "../components/StyledButton.tsx";
+import AddFaqPopup from "./ActivityForms.tsx";
 
 interface CalendarProps {
   activities: Doc<Activity>[];
+  setActivities: React.Dispatch<React.SetStateAction<Doc<Activity>[]>>;
 }
 
 function colourActivity(type: ActivityType): string {
@@ -85,15 +91,18 @@ const monthFirst = () => {
   return res;
 };
 
-export default function Calendar({ activities }: CalendarProps) {
+export default function Calendar({ activities, setActivities }: CalendarProps) {
   const [monthStart, setMonthStart] = useState<Date>(monthFirst());
   const [monthActivities, setMonthActivities] = useState<Doc<Activity>[]>([]);
   const [prevDisabled, setPrevDisabled] = useState(false);
   const [nextDisabled, setNextDisabled] = useState(false);
+  const [selectedDoc, setSelectedDoc] = useState<null | Doc<Activity>>(null);
+  const [addPopupVisible, setAddPopupVisible] = useState(false);
 
   // TODO: Work out if limits necessary, and how dynamic they may need to be
   const earliest = new Date(2023, 4, 1);
-  const latest = new Date(2023, 7, 1);
+  const latest = new Date(2023, 11, 1);
+  const { isLoggedIn } = useAuth();
   const nextMonth = () => {
     setMonthStart(new Date(monthStart.setMonth(monthStart.getMonth() + 1)));
     setNextDisabled(monthStart.getTime() >= latest.getTime());
@@ -108,7 +117,14 @@ export default function Calendar({ activities }: CalendarProps) {
     year: "numeric",
     month: "long",
   });
-  const tileDateFormat = new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric" })
+  const tileDateFormat = new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric", month: "short" })
+
+  const handleAddSubmit = (doc: Doc<Activity>) => {
+    const newDocs = [...activities, doc];
+    setActivities(newDocs.sort((a, b) => a.data.date.getTime() - b.data.date.getTime()));
+    console.log(activities);
+    setAddPopupVisible(false);
+  }
 
   useEffect(() => {
     setMonthActivities(createMonthActivities(monthStart, activities));
@@ -141,14 +157,34 @@ export default function Calendar({ activities }: CalendarProps) {
       <div className={"w-full h-full overflow-x-scroll overflow-y-scroll"}>
         <div className={"inline-flex flex-col w-[800px] min-h-max lg:w-full lg:h-[725px] "}>
           <div className={"grid grid-rows-5 grid-cols-7 gap-y-1 gap-x-0.5 lg:gap-4 p-2"}>
-            {monthActivities.map(({data}, actIndex) => (
+            {monthActivities.map((doc, actIndex) => (
               <div
                 key={actIndex}
-                className={colourActivity(data.type).concat(" shadow-md p-1 lg:p-4 h-32 border border-slate-400")}
+                className={`${colourActivity(doc.data.type)} shadow-md p-1 lg:p-4 h-32 border border-slate-400`}
               >
-                <h3 className={"text-sm lg:text-base text-gray-700"}>{tileDateFormat.format(data.date)}</h3>
-                <h2 className={"text-base lg:text-lg font-semibold"}>{data.title}</h2>
-                <p className={"text-sm lg:text-base text-gray-500"}>{data.misc}</p>
+                <div className={"flex flex-row justify-between"}>
+                  <h3 className={"text-sm lg:text-base text-gray-700"}>{tileDateFormat.format(doc.data.date)}</h3>
+                  {
+                    isLoggedIn && doc.data.type === ActivityType.Blank &&
+                    <StyledButton
+                      className={""}
+                      children={<FontAwesomeIcon icon={faPlus} />}
+                      onClick={() => {setSelectedDoc(doc); setAddPopupVisible(true)}} />
+                  }
+                  {
+                    addPopupVisible && 
+                    <AddFaqPopup doc={selectedDoc as Doc<Activity>} onSubmit={handleAddSubmit} />
+                  }
+                  {
+                    isLoggedIn && doc.data.type !== ActivityType.Blank && 
+                    <StyledButton
+                      className={""}
+                      children={<FontAwesomeIcon icon={faTrashCan} />}
+                      onClick={() => console.log("Delete")} />
+                  }
+                </div>
+                <h2 className={"text-base lg:text-lg font-semibold"}>{doc.data.title}</h2>
+                <p className={"text-sm lg:text-base text-gray-500"}>{doc.data.misc}</p>
               </div>
             ))}
           </div>
