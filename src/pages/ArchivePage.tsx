@@ -20,7 +20,6 @@ interface CommitteeUpdatesProps {
 }
 
 const handleAddArchiveSubmit = (archive: Archive, images: FileList, archiveDocs: Doc<Archive>[], setState: React.Dispatch<React.SetStateAction<Doc<Archive>[]>>) => {
-  console.log(images);
   const handleUpload = () => {
     if (images) {
       
@@ -66,12 +65,18 @@ const isValidAddArchive = (archive: Archive, selectedFiles: FileList | null): [b
   return [true, null];
 }
 
-const handleEditArchiveSubmit = (newArchive: Archive, oldOrder: number, archiveDocs: Doc<Archive>[], setState: React.Dispatch<React.SetStateAction<Doc<Archive>[]>>) => {
-  const oldDoc = archiveDocs.filter((doc) => doc.data.order === oldOrder)[0];
-  oldDoc.data = newArchive;
-  if (newArchive.order !== oldOrder) {
+const handleEditArchiveSubmit = (newArchive: Archive, oldOrder: number, archiveDocs: Doc<Archive>[], setState: React.Dispatch<React.SetStateAction<Doc<Archive>[]>>) => {  
+  if (newArchive.order === oldOrder) {
     archiveDocs.forEach((doc) => {
-      if (doc.data.order === newArchive.order) {
+      if (doc.data.order === oldOrder) {
+        doc.data = newArchive;
+      }
+    })
+  } else {
+    archiveDocs.forEach((doc) => {
+      if (doc.data.order === oldOrder) {
+        doc.data = newArchive;
+      } else if (doc.data.order === newArchive.order) {
         doc.data.order = oldOrder;
       }
     })
@@ -125,7 +130,6 @@ function ArchiveCommitteeUpdates({ archiveDocs, setArchiveDocs }: CommitteeUpdat
 
   const handleSaveChangesClick = () => {
     archiveDocs.forEach(async (archiveDoc) => {
-      console.log("Saving: ", archiveDoc);
       if (archiveDoc.id) {
         await setDoc(doc(db, "archive", archiveDoc.id), archiveDoc.data);
       } else {
@@ -190,7 +194,7 @@ function ArchiveCommitteeUpdates({ archiveDocs, setArchiveDocs }: CommitteeUpdat
         <AddArchiveForm 
           onSubmit={handleAddArchiveSubmit}
           isValidAdd={isValidAddArchive}
-          archiveDocs={archiveDocs}
+          archiveDocs={[...archiveDocs]}
           setState={setArchiveDocs}
         />
       </Tab.Panel>
@@ -198,7 +202,7 @@ function ArchiveCommitteeUpdates({ archiveDocs, setArchiveDocs }: CommitteeUpdat
         <EditArchiveForm 
           onSubmit={handleEditArchiveSubmit}
           isValidEdit={isValidEditArchive}
-          archiveDocs={archiveDocs}
+          archiveDocs={[...archiveDocs]}
           setState={setArchiveDocs}
         />
       </Tab.Panel>
@@ -206,7 +210,7 @@ function ArchiveCommitteeUpdates({ archiveDocs, setArchiveDocs }: CommitteeUpdat
         <DeleteArchiveForm 
           onSubmit={handleDeleteArchiveSubmit}
           isValidDelete={isValidDeleteArchive}
-          archiveDocs={archiveDocs}
+          archiveDocs={[...archiveDocs]}
           setState={setArchiveDocs}
         />
       </Tab.Panel>
