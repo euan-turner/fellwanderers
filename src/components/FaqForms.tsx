@@ -113,7 +113,12 @@ export function EditFaqForm({ onSubmit, isValidEdit, faqDocs, setState}: EditFaq
   };
 
   const handleOldOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setOldOrder(parseInt(e.target.value, 10));
+    const order = parseInt(e.target.value, 10);
+    setOldOrder(order);
+    const doc = faqDocs.find((doc) => doc.data.order === order) as Doc<Faq>;
+    setNewOrder(order);
+    setQuestion(doc.data.question);
+    setAnswer(doc.data.answer);
   }
   const handleNewOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setNewOrder(parseInt(e.target.value, 10));

@@ -12,7 +12,6 @@ interface AddArchiveFormProps {
   setState: SetArchiveDocState;
 }
 
-// TODO: Support multiple images
 export function AddArchiveForm({ onSubmit, isValidAdd, archiveDocs, setState}: AddArchiveFormProps) {
   const [title, setTitle] = useState('');
   const [desc, setDesc] = useState('');
@@ -65,7 +64,7 @@ export function AddArchiveForm({ onSubmit, isValidAdd, archiveDocs, setState}: A
           <label className={"flex items-start mb-2"}>
             {"Description: "}
             <textarea
-              className={"w-full mx-2"}
+              className={"w-full mx-2 h-40"}
               value={desc}
               onChange={(e) => setDesc(e.target.value)}
               required
@@ -148,7 +147,12 @@ export function EditArchiveForm({ onSubmit, isValidEdit, archiveDocs, setState}:
   }
 
   const handleTitleOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setOldTitle(e.target.value);
+    const title = e.target.value;
+    setOldTitle(title);
+    const doc = archiveDocs.find((doc) => doc.data.title === title) as Doc<Archive>;
+    setNewTitle(title);
+    setDesc(doc.data.desc);
+    setOrder(doc.data.order);
   }
   const handleOrderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setOrder(parseInt(e.target.value, 10));
@@ -186,7 +190,7 @@ export function EditArchiveForm({ onSubmit, isValidEdit, archiveDocs, setState}:
           <label className={"flex items-start mb-2"}>
             {"Description: "}
             <textarea
-              className={"w-full mx-2"}
+              className={"w-full mx-2 h-40"}
               value={desc}
               onChange={(e) => setDesc(e.target.value)}
               required
