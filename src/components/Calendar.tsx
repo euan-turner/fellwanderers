@@ -6,9 +6,10 @@ import {
   faPlus,
   faTrashCan
 } from "@fortawesome/free-solid-svg-icons";
-
+import { collection, doc, addDoc, setDoc } from "firebase/firestore";
 import Activity, { ActivityType } from "../types/Activity.ts";
 import { Doc } from "../../firebaseAPI.ts";
+import { db } from "../../firebase.ts";
 import { useAuth } from "../contexts/AuthContext.tsx";
 import StyledButton from "../components/StyledButton.tsx";
 import AddFaqPopup from "./ActivityForms.tsx";
@@ -126,6 +127,20 @@ export default function Calendar({ activities, setActivities }: CalendarProps) {
     setAddPopupVisible(false);
   }
 
+  const handleSaveChangesClick = () => {
+    activities.forEach(async (actDoc) => {
+      if (actDoc.id) {
+        await setDoc(doc(db, "activities", actDoc.id), actDoc.data);
+      } else {
+        const docRef = await addDoc(collection(db, "activities"), actDoc.data);
+        actDoc.id = docRef.id;
+      }
+    });
+
+    alert("Saved Changes");
+    localStorage.setItem("activities", JSON.stringify(activities));
+  }
+
   useEffect(() => {
     setMonthActivities(createMonthActivities(monthStart, activities));
   }, [monthStart, activities]);
@@ -153,6 +168,10 @@ export default function Calendar({ activities, setActivities }: CalendarProps) {
         >
           {!nextDisabled && <FontAwesomeIcon icon={faChevronRight} />}
         </button>
+        {
+          isLoggedIn && 
+          <StyledButton className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border text-xs sm:text-sm font-semibold rounded-md no-underline hover:bg-green-900/60"} children={<p>Save Changes</p>} onClick={handleSaveChangesClick} />
+        }
       </div>
       <div className={"w-full h-full overflow-x-scroll overflow-y-scroll"}>
         <div className={"inline-flex flex-col w-[800px] min-h-max lg:w-full lg:h-[725px] "}>
