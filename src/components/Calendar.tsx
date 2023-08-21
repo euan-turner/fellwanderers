@@ -6,7 +6,7 @@ import {
   faPlus,
   faTrashCan
 } from "@fortawesome/free-solid-svg-icons";
-import { collection, doc, addDoc, setDoc } from "firebase/firestore";
+import { deleteDoc, collection, doc, addDoc, setDoc } from "firebase/firestore";
 import Activity, { ActivityType } from "../types/Activity.ts";
 import { Doc } from "../../firebaseAPI.ts";
 import { db } from "../../firebase.ts";
@@ -99,6 +99,7 @@ export default function Calendar({ activities, setActivities }: CalendarProps) {
   const [nextDisabled, setNextDisabled] = useState(false);
   const [selectedDoc, setSelectedDoc] = useState<null | Doc<Activity>>(null);
   const [addPopupVisible, setAddPopupVisible] = useState(false);
+  const [docsToDelete, setDocsToDelete] = useState<Doc<Activity>[]>([]);
 
   // TODO: Work out if limits necessary, and how dynamic they may need to be
   const earliest = new Date(2023, 4, 1);
@@ -127,6 +128,12 @@ export default function Calendar({ activities, setActivities }: CalendarProps) {
     setAddPopupVisible(false);
   }
 
+  const handleDeleteSubmit = (doc: Doc<Activity>) => {
+    const newDocs = activities.filter((actDoc) => actDoc.id !== doc.id);
+    setActivities([...newDocs]);
+    setDocsToDelete([...docsToDelete, doc]);
+  }
+
   const handleSaveChangesClick = () => {
     activities.forEach(async (actDoc) => {
       if (actDoc.id) {
@@ -136,7 +143,12 @@ export default function Calendar({ activities, setActivities }: CalendarProps) {
         actDoc.id = docRef.id;
       }
     });
-
+    docsToDelete.forEach(async ({data, id}) => {
+      if (id) {
+        console.log("Deleting: ", id, data);
+        await deleteDoc(doc(db, "activities", id));
+      }
+    });
     alert("Saved Changes");
     localStorage.setItem("activities", JSON.stringify(activities));
   }
@@ -199,7 +211,7 @@ export default function Calendar({ activities, setActivities }: CalendarProps) {
                     <StyledButton
                       className={""}
                       children={<FontAwesomeIcon icon={faTrashCan} />}
-                      onClick={() => console.log("Delete")} />
+                      onClick={() => {handleDeleteSubmit(doc)}} />
                   }
                 </div>
                 <h2 className={"text-base lg:text-lg font-semibold"}>{doc.data.title}</h2>

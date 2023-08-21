@@ -139,7 +139,7 @@ function ArchiveCommitteeUpdates({ archiveDocs, setArchiveDocs }: CommitteeUpdat
     });
     docsToDelete.forEach(async ({data, id}) => {
       if (id) {
-        console.log("Deleting :", id, data);
+        console.log("Deleting: ", id, data);
         await deleteDoc(doc(db, "archive", id));
         try {
           const bucket = ref(storage, data.directory);
