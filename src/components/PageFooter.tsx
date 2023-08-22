@@ -7,7 +7,6 @@ import { signOut } from "firebase/auth";
 import { auth } from "../../firebase.ts";
 import { useAuth } from "../contexts/AuthContext.tsx";
 import LoginPopup from "./LoginPopup.tsx";
-import StyledButton from "../components/StyledButton.tsx";
 import StyledLink from "../components/StyledLink.tsx";
 
 const instaLink = "https://www.instagram.com/icfellwanderers";
@@ -44,28 +43,20 @@ export default function PageFooter() {
 
         {
           !isLoggedIn && 
-          <StyledButton
-          className={buttonStyle}
-          onClick={handleLoginButtonClick}
-          children={
+          <button className={buttonStyle} onClick={handleLoginButtonClick}>
             <div>
               <FontAwesomeIcon icon={faArrowRightToBracket} /> Sign In
             </div>
-          }
-          />
+          </button>
         }
         
         {
           isLoggedIn &&
-          <StyledButton
-          className={buttonStyle}
-          onClick={handleLogoutButtonClick}
-          children={
+          <button className={buttonStyle} onClick={handleLogoutButtonClick}>
             <div>
               <FontAwesomeIcon icon={faArrowRightFromBracket} /> Sign Out
             </div>
-          }
-          />
+          </button>
         }
         <div
         className={

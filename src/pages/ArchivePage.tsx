@@ -5,7 +5,6 @@ import HikeArchive from "../components/HikeArchive.tsx";
 import PageHeader from "../components/PageHeader";
 import PageFooter from "../components/PageFooter";
 import Archive from "../types/Archive.ts";
-import StyledButton from "../components/StyledButton.tsx";
 import { setCollectionState, Doc } from "../../firebaseAPI";
 import { useAuth } from "../contexts/AuthContext.tsx";
 import { AddArchiveForm, EditArchiveForm, DeleteArchiveForm } from "../components/ArchiveForms.tsx";
@@ -21,9 +20,7 @@ interface CommitteeUpdatesProps {
 const handleAddArchiveSubmit = (archive: Archive, images: FileList, archiveDocs: Doc<Archive>[], setState: React.Dispatch<React.SetStateAction<Doc<Archive>[]>>) => {
   const handleUpload = () => {
     if (images) {
-      
       const storageRef = ref(storage, archive.directory);
-
       for (let i = 0; i < images.length; i++) {
         const file = images[i];
         const childRef = ref(storageRef, `${file.name}`);
@@ -206,11 +203,14 @@ function ArchiveCommitteeUpdates({ archiveDocs, setArchiveDocs }: CommitteeUpdat
         />
       </Tab.Panel>
       </Tab.Group>
-      <StyledButton className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border text-xs sm:text-sm font-semibold rounded-md no-underline hover:bg-green-900/60"} children={<p>Save Changes</p>} onClick={handleSaveChangesClick} />
+      <button className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border text-xs sm:text-sm font-semibold rounded-md no-underline hover:bg-green-900/60"} onClick={handleSaveChangesClick}>
+        <p>Save Changes</p>
+      </button>
     </div>
   )
 
 }
+
 export default function ArchivePage() {
   const [archiveDocs, setArchiveDocs] = useState<Doc<Archive>[]>([]);
   const { isLoggedIn } = useAuth();

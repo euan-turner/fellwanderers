@@ -9,7 +9,6 @@ import {
 import Activity, { ActivityType } from "../types/Activity.ts";
 import { Doc, handleSaveChangesClick } from "../../firebaseAPI.ts";
 import { useAuth } from "../contexts/AuthContext.tsx";
-import StyledButton from "../components/StyledButton.tsx";
 import AddActivityPopup from "./ActivityForms.tsx";
 
 interface CalendarProps {
@@ -162,7 +161,10 @@ export default function Calendar({ activities, setActivities }: CalendarProps) {
         </button>
         {
           isLoggedIn && 
-          <StyledButton className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border text-xs sm:text-sm font-semibold rounded-md no-underline hover:bg-green-900/60"} children={<p>Save Changes</p>} onClick={() => handleSaveChangesClick<Activity>("activities", activities, docsToDelete)} />
+          <button className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border text-xs sm:text-sm font-semibold rounded-md no-underline hover:bg-green-900/60"} onClick={() => handleSaveChangesClick<Activity>("activities", activities, docsToDelete)}>
+            <p>Save Changes</p>
+          </button>
+
         }
       </div>
       <div className={"w-full h-full overflow-x-scroll overflow-y-scroll"}>
@@ -177,10 +179,9 @@ export default function Calendar({ activities, setActivities }: CalendarProps) {
                   <h3 className={"text-sm lg:text-base text-gray-700"}>{tileDateFormat.format(doc.data.date)}</h3>
                   {
                     isLoggedIn && doc.data.type === ActivityType.Blank &&
-                    <StyledButton
-                      className={""}
-                      children={<FontAwesomeIcon icon={faPlus} />}
-                      onClick={() => {setSelectedDoc(doc); setAddPopupVisible(true)}} />
+                    <button onClick={() => {setSelectedDoc(doc); setAddPopupVisible(true)}}>
+                      <FontAwesomeIcon icon={faPlus} />
+                    </button>
                   }
                   {
                     addPopupVisible && 
@@ -188,10 +189,9 @@ export default function Calendar({ activities, setActivities }: CalendarProps) {
                   }
                   {
                     isLoggedIn && doc.data.type !== ActivityType.Blank && 
-                    <StyledButton
-                      className={""}
-                      children={<FontAwesomeIcon icon={faTrashCan} />}
-                      onClick={() => {handleDeleteSubmit(doc)}} />
+                    <button onClick={() => {handleDeleteSubmit(doc)}}>
+                      <FontAwesomeIcon icon={faTrashCan} />
+                    </button>
                   }
                 </div>
                 <h2 className={"text-base lg:text-lg font-semibold"}>{doc.data.title}</h2>

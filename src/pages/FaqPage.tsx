@@ -5,7 +5,6 @@ import React, { useState, useEffect } from "react";
 
 import PageHeader from "../components/PageHeader";
 import PageFooter from "../components/PageFooter";
-import StyledButton from "../components/StyledButton";
 import { setCollectionState, Doc, handleSaveChangesClick } from "../../firebaseAPI.ts";
 import { Faq } from "../types/Faq.ts";
 import { useAuth } from "../contexts/AuthContext.tsx";
@@ -151,22 +150,23 @@ function FaqCommitteeUpdates({ faqDocs, setFaqDocs }: CommitteeUpdatesProps) {
                       )
                     }
                   >Delete FAQ</Tab>
-      </Tab.List>
-      <Tab.Panels>
-        <Tab.Panel>
-          <AddFaqForm onSubmit={handleAddFaqSubmit} isValidAdd={isValidAddFaq} faqDocs={[...faqDocs]} setState={setFaqDocs}/>
-        </Tab.Panel>
-        <Tab.Panel>
-          <EditFaqForm onSubmit={handleEditFaqSubmit} isValidEdit={isValidEditFaq} faqDocs={[...faqDocs]} setState={setFaqDocs} />
-        </Tab.Panel>
-        <Tab.Panel>
-          <DeleteFaqForm onSubmit={handleDeleteFaqSubmit} isValidDelete={isValidDeleteFaq} faqDocs={[...faqDocs]} setState={setFaqDocs} />
-        </Tab.Panel>
-      </Tab.Panels>
-    </Tab.Group>
-    <StyledButton className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border text-xs sm:text-sm font-semibold rounded-md no-underline hover:bg-green-900/60"}  children={<p>Save Changes</p>} onClick={() => handleSaveChangesClick<Faq>("faqs", faqDocs, docsToDelete)}/>
+        </Tab.List>
+        <Tab.Panels>
+          <Tab.Panel>
+            <AddFaqForm onSubmit={handleAddFaqSubmit} isValidAdd={isValidAddFaq} faqDocs={[...faqDocs]} setState={setFaqDocs}/>
+          </Tab.Panel>
+          <Tab.Panel>
+            <EditFaqForm onSubmit={handleEditFaqSubmit} isValidEdit={isValidEditFaq} faqDocs={[...faqDocs]} setState={setFaqDocs} />
+          </Tab.Panel>
+          <Tab.Panel>
+            <DeleteFaqForm onSubmit={handleDeleteFaqSubmit} isValidDelete={isValidDeleteFaq} faqDocs={[...faqDocs]} setState={setFaqDocs} />
+          </Tab.Panel>
+        </Tab.Panels>
+      </Tab.Group>
+      <button className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border text-xs sm:text-sm font-semibold rounded-md no-underline hover:bg-green-900/60"} onClick={() => handleSaveChangesClick<Faq>("faqs", faqDocs, docsToDelete)}>
+        <p>Save Changes</p>
+      </button>
     </div>
-    
   )
 }
 
