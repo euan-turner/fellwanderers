@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { deleteDoc, collection, doc, addDoc, setDoc } from "firebase/firestore";
 import Activity, { ActivityType } from "../types/Activity.ts";
-import { Doc } from "../../firebaseAPI.ts";
+import { Doc, handleSaveChangesClick } from "../../firebaseAPI.ts";
 import { db } from "../../firebase.ts";
 import { useAuth } from "../contexts/AuthContext.tsx";
 import StyledButton from "../components/StyledButton.tsx";
@@ -134,24 +134,24 @@ export default function Calendar({ activities, setActivities }: CalendarProps) {
     setDocsToDelete([...docsToDelete, doc]);
   }
 
-  const handleSaveChangesClick = () => {
-    activities.forEach(async (actDoc) => {
-      if (actDoc.id) {
-        await setDoc(doc(db, "activities", actDoc.id), actDoc.data);
-      } else {
-        const docRef = await addDoc(collection(db, "activities"), actDoc.data);
-        actDoc.id = docRef.id;
-      }
-    });
-    docsToDelete.forEach(async ({data, id}) => {
-      if (id) {
-        console.log("Deleting: ", id, data);
-        await deleteDoc(doc(db, "activities", id));
-      }
-    });
-    alert("Saved Changes");
-    localStorage.setItem("activities", JSON.stringify(activities));
-  }
+  // const handleSaveChangesClick = () => {
+  //   activities.forEach(async (actDoc) => {
+  //     if (actDoc.id) {
+  //       await setDoc(doc(db, "activities", actDoc.id), actDoc.data);
+  //     } else {
+  //       const docRef = await addDoc(collection(db, "activities"), actDoc.data);
+  //       actDoc.id = docRef.id;
+  //     }
+  //   });
+  //   docsToDelete.forEach(async ({data, id}) => {
+  //     if (id) {
+  //       console.log("Deleting: ", id, data);
+  //       await deleteDoc(doc(db, "activities", id));
+  //     }
+  //   });
+  //   alert("Saved Changes");
+  //   localStorage.setItem("activities", JSON.stringify(activities));
+  // }
 
   useEffect(() => {
     setMonthActivities(createMonthActivities(monthStart, activities));
@@ -182,7 +182,7 @@ export default function Calendar({ activities, setActivities }: CalendarProps) {
         </button>
         {
           isLoggedIn && 
-          <StyledButton className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border text-xs sm:text-sm font-semibold rounded-md no-underline hover:bg-green-900/60"} children={<p>Save Changes</p>} onClick={handleSaveChangesClick} />
+          <StyledButton className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border text-xs sm:text-sm font-semibold rounded-md no-underline hover:bg-green-900/60"} children={<p>Save Changes</p>} onClick={() => handleSaveChangesClick<Activity>("activities", activities, docsToDelete)} />
         }
       </div>
       <div className={"w-full h-full overflow-x-scroll overflow-y-scroll"}>

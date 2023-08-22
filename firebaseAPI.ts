@@ -1,4 +1,4 @@
-import { DocumentData, collection, getDocs } from "firebase/firestore";
+import { DocumentData, WithFieldValue, collection, getDocs, doc, addDoc, deleteDoc, setDoc } from "firebase/firestore";
 import { db } from "./firebase";
 import React from "react";
 
@@ -58,4 +58,23 @@ export function setCollectionState<T>(dataName: string, order: Order<T>, setColl
         console.error(error.message);
       })
   }
+}
+
+export function handleSaveChangesClick<T extends WithFieldValue<DocumentData>>(dataName: string, docsToAdd: Doc<T>[], docsToDelete: Doc<T>[]) {
+  docsToAdd.forEach(async (docToAdd) => {
+    if (docToAdd.id) {
+      await setDoc(doc(db, dataName, docToAdd.id), docToAdd.data);
+    } else {
+      const docRef = await addDoc(collection(db, dataName), docToAdd.data);
+      docToAdd.id = docRef.id;
+    }
+  });
+  docsToDelete.forEach(async ({data, id}) => {
+    if (id) {
+      await deleteDoc(doc(db, dataName, id));
+      console.log("Deleted: ", data);
+    }
+  });
+  alert("Saved Changes");
+  localStorage.setItem(dataName, JSON.stringify(docsToAdd));
 }
