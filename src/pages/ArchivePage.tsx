@@ -151,8 +151,7 @@ function ArchiveCommitteeUpdates({ archiveDocs, setArchiveDocs }: CommitteeUpdat
       }
     });
     alert("Saved Changes");
-    // TODO: Need to deal with local storage issues
-    // Probably set it with setCollectionState
+    // TODO: Deal with disjoint uploads of images
     localStorage.setItem("archive", JSON.stringify(archiveDocs));
   }
 

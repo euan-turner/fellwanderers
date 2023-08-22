@@ -6,12 +6,10 @@ import React, { useState, useEffect } from "react";
 import PageHeader from "../components/PageHeader";
 import PageFooter from "../components/PageFooter";
 import StyledButton from "../components/StyledButton";
-import { setCollectionState, Doc } from "../../firebaseAPI.ts";
+import { setCollectionState, Doc, handleSaveChangesClick } from "../../firebaseAPI.ts";
 import { Faq } from "../types/Faq.ts";
 import { useAuth } from "../contexts/AuthContext.tsx";
 import { AddFaqForm, EditFaqForm, DeleteFaqForm } from "../components/FaqForms.tsx";
-import { collection, addDoc, setDoc, deleteDoc, doc } from "firebase/firestore";
-import { db } from "../../firebase.ts";
 
 interface FAQProps {
   faq: Faq
@@ -110,37 +108,20 @@ function FaqCommitteeUpdates({ faqDocs, setFaqDocs }: CommitteeUpdatesProps) {
   const baseTabStyle = "w-full rounded-md px-1 sm:px-2.5 py-2 lg:py-2.5 text-sm leading-5 text-black font-semibold " +
   "ring-white ring-opacity-60 ring-offset-2 ring-offset-logoGreen-light " +
   "focus:outline-none focus:ring-2 ";
-  const [idsToDelete, setIdsToDelete] = useState<(string | null)[]>([]);
+  const [docsToDelete, setDocsToDelete] = useState<Doc<Faq>[]>([]);
 
-  const handleDeleteFaqSubmit = (faqNumber: number, faqDocs: Doc<Faq>[], setState: React.Dispatch<React.SetStateAction<Doc<Faq>[]>>) => {
+  const handleDeleteFaqSubmit = (faqNumber: number) => {
     const newFaqDocs = faqDocs.filter((doc) => doc.data.order !== faqNumber);
-    const id = faqDocs.filter((doc) => doc.data.order === faqNumber)[0].id;
-    setIdsToDelete([...idsToDelete, id]);
+    const doc = faqDocs.find((doc) => doc.data.order === faqNumber) as Doc<Faq>;
     newFaqDocs.forEach((doc) => {
       if (doc.data.order > faqNumber) {
         doc.data.order--;
       }
     })
-    setState(newFaqDocs);
+    setFaqDocs([...newFaqDocs]);
+    setDocsToDelete([...docsToDelete, doc]);
   };
 
-  const handleSaveChangesClick = () => {
-    faqDocs.forEach(async (faqDoc) => {
-      if (faqDoc.id) {
-        await setDoc(doc(db, "faqs", faqDoc.id), faqDoc.data);
-      } else {
-        const docRef = await addDoc(collection(db, "faqs"), faqDoc.data);
-        faqDoc.id = docRef.id;
-      }
-    });
-    idsToDelete.forEach(async (id) => {
-      if (id) {
-        await deleteDoc(doc(db, "faqs", id));
-      }
-    });
-    alert("Saved Changes");
-    localStorage.setItem("faqs", JSON.stringify(faqDocs));
-  }
   return (
     <div className={"w-full px-4 lg:px-8"}>
       <Tab.Group>
@@ -183,7 +164,7 @@ function FaqCommitteeUpdates({ faqDocs, setFaqDocs }: CommitteeUpdatesProps) {
         </Tab.Panel>
       </Tab.Panels>
     </Tab.Group>
-    <StyledButton className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border text-xs sm:text-sm font-semibold rounded-md no-underline hover:bg-green-900/60"}  children={<p>Save Changes</p>} onClick={handleSaveChangesClick}/>
+    <StyledButton className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border text-xs sm:text-sm font-semibold rounded-md no-underline hover:bg-green-900/60"}  children={<p>Save Changes</p>} onClick={() => handleSaveChangesClick<Faq>("faqs", faqDocs, docsToDelete)}/>
     </div>
     
   )

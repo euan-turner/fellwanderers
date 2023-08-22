@@ -6,10 +6,8 @@ import {
   faPlus,
   faTrashCan
 } from "@fortawesome/free-solid-svg-icons";
-import { deleteDoc, collection, doc, addDoc, setDoc } from "firebase/firestore";
 import Activity, { ActivityType } from "../types/Activity.ts";
 import { Doc, handleSaveChangesClick } from "../../firebaseAPI.ts";
-import { db } from "../../firebase.ts";
 import { useAuth } from "../contexts/AuthContext.tsx";
 import StyledButton from "../components/StyledButton.tsx";
 import AddFaqPopup from "./ActivityForms.tsx";
@@ -133,25 +131,6 @@ export default function Calendar({ activities, setActivities }: CalendarProps) {
     setActivities([...newDocs]);
     setDocsToDelete([...docsToDelete, doc]);
   }
-
-  // const handleSaveChangesClick = () => {
-  //   activities.forEach(async (actDoc) => {
-  //     if (actDoc.id) {
-  //       await setDoc(doc(db, "activities", actDoc.id), actDoc.data);
-  //     } else {
-  //       const docRef = await addDoc(collection(db, "activities"), actDoc.data);
-  //       actDoc.id = docRef.id;
-  //     }
-  //   });
-  //   docsToDelete.forEach(async ({data, id}) => {
-  //     if (id) {
-  //       console.log("Deleting: ", id, data);
-  //       await deleteDoc(doc(db, "activities", id));
-  //     }
-  //   });
-  //   alert("Saved Changes");
-  //   localStorage.setItem("activities", JSON.stringify(activities));
-  // }
 
   useEffect(() => {
     setMonthActivities(createMonthActivities(monthStart, activities));
