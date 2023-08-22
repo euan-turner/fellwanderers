@@ -13,7 +13,6 @@ import { storage, db } from "../../firebase.ts";
 import { ref, uploadBytes, deleteObject, listAll } from "firebase/storage";
 import { doc, addDoc, collection, deleteDoc, setDoc } from "firebase/firestore";
 
-
 interface CommitteeUpdatesProps {
   archiveDocs: Doc<Archive>[];
   setArchiveDocs: React.Dispatch<React.SetStateAction<Doc<Archive>[]>>;
@@ -114,6 +113,9 @@ function ArchiveCommitteeUpdates({ archiveDocs, setArchiveDocs }: CommitteeUpdat
   const baseTabStyle = "w-full rounded-md px-1 sm:px-2.5 py-2 lg:py-2.5 text-sm leading-5 text-black font-semibold " +
   "ring-white ring-opacity-60 ring-offset-2 ring-offset-logoGreen-light " +
   "focus:outline-none focus:ring-2 ";
+  const styleTab = (selected: boolean) => baseTabStyle.concat(
+    selected ? "bg-white shadow" : "hover:bg-white/20",
+  );
   const [docsToDelete, setDocsToDelete] = useState<Doc<Archive>[]>([]);
   
   const handleDeleteArchiveSubmit = (title: string, archiveDocs: Doc<Archive>[], setState: React.Dispatch<React.SetStateAction<Doc<Archive>[]>>) => {
@@ -155,10 +157,6 @@ function ArchiveCommitteeUpdates({ archiveDocs, setArchiveDocs }: CommitteeUpdat
     localStorage.setItem("archive", JSON.stringify(archiveDocs));
   }
 
-  useEffect(() => {
-    console.log("Updated: ", docsToDelete)
-  }, [docsToDelete]);
-
   return (
     <div>
       <Tab.Group>
@@ -169,24 +167,18 @@ function ArchiveCommitteeUpdates({ archiveDocs, setArchiveDocs }: CommitteeUpdat
             >
           <Tab
                     className={({ selected }) =>
-                      baseTabStyle.concat(
-                        selected ? "bg-white shadow" : "hover:bg-white/20",
-                      )
+                      styleTab(selected)
                     }
                   >Add Archive</Tab>
           <Tab
                     className={({ selected }) =>
-                      baseTabStyle.concat(
-                        selected ? "bg-white shadow" : "hover:bg-white/20",
-                      )
-                    }
+                    styleTab(selected)
+                  }
                   >Edit Archive</Tab>
           <Tab
                     className={({ selected }) =>
-                      baseTabStyle.concat(
-                        selected ? "bg-white shadow" : "hover:bg-white/20",
-                      )
-                    }
+                    styleTab(selected)
+                  }
                   >Delete Archive</Tab>
       </Tab.List> 
       <Tab.Panel>

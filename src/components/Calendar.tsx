@@ -10,7 +10,7 @@ import Activity, { ActivityType } from "../types/Activity.ts";
 import { Doc, handleSaveChangesClick } from "../../firebaseAPI.ts";
 import { useAuth } from "../contexts/AuthContext.tsx";
 import StyledButton from "../components/StyledButton.tsx";
-import AddFaqPopup from "./ActivityForms.tsx";
+import AddActivityPopup from "./ActivityForms.tsx";
 
 interface CalendarProps {
   activities: Doc<Activity>[];
@@ -61,6 +61,15 @@ const createMonthActivities = (startDate: Date, planned: Doc<Activity>[]) => {
     return actDate >= currDate && actDate <= endDate;
   });
   const activities: Doc<Activity>[] = [];
+  const blankActivity = () => {return {
+    id: "",
+    data: {
+    title: "",
+    date: new Date(currDate),
+    type: ActivityType.Blank,
+    misc: "",
+    }
+  }};
   while (currDate.getTime() <= endDate.getTime()) {
     if (
       monthActivities.length > 0 &&
@@ -68,15 +77,7 @@ const createMonthActivities = (startDate: Date, planned: Doc<Activity>[]) => {
     ) {
       activities.push(monthActivities.shift() as Doc<Activity>);
     } else {
-      activities.push({
-        id: "",
-        data: {
-        title: "",
-        date: new Date(currDate),
-        type: ActivityType.Blank,
-        misc: "",
-        }
-      });
+      activities.push(blankActivity());
     }
     currDate.setDate(currDate.getDate() + 1);
   }
@@ -113,16 +114,16 @@ export default function Calendar({ activities, setActivities }: CalendarProps) {
     setPrevDisabled(monthStart.getTime() <= earliest.getTime());
     setNextDisabled(false);
   };
-  const titleDateFormat = new Intl.DateTimeFormat("en-GB", {
-    year: "numeric",
-    month: "long",
-  });
+  const titleDateFormat = new Intl.DateTimeFormat("en-GB", { year: "numeric", month: "long" });
   const tileDateFormat = new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric", month: "short" })
 
   const handleAddSubmit = (doc: Doc<Activity>) => {
     const newDocs = [...activities, doc];
     setActivities(newDocs.sort((a, b) => a.data.date.getTime() - b.data.date.getTime()));
     console.log(activities);
+  }
+
+  const handleAddClose = () => {
     setAddPopupVisible(false);
   }
 
@@ -183,7 +184,7 @@ export default function Calendar({ activities, setActivities }: CalendarProps) {
                   }
                   {
                     addPopupVisible && 
-                    <AddFaqPopup doc={selectedDoc as Doc<Activity>} onSubmit={handleAddSubmit} />
+                    <AddActivityPopup doc={selectedDoc as Doc<Activity>} onSubmit={handleAddSubmit} onClose={handleAddClose} />
                   }
                   {
                     isLoggedIn && doc.data.type !== ActivityType.Blank && 

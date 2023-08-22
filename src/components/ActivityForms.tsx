@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import Activity, { ActivityType } from "../types/Activity";
 import { Doc } from "../../firebaseAPI";
-interface AddFaqPopupProps {
+interface AddActivityPopupProps {
   doc: Doc<Activity>;
   onSubmit: (doc: Doc<Activity>) => void;
+  onClose: () => void;
 }
-export default function AddFaqPopup({ doc, onSubmit }: AddFaqPopupProps) {
+export default function AddActivityPopup({ doc, onSubmit, onClose }: AddActivityPopupProps) {
   const [title, setTitle] = useState('');
   const [type, setType] = useState('');
   const [misc, setMisc] = useState('');
@@ -42,6 +43,7 @@ export default function AddFaqPopup({ doc, onSubmit }: AddFaqPopupProps) {
       }
       doc.data = newActivity;
       onSubmit(doc);
+      onClose();
     }
   }
   const tileDateFormat = new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric", month: "short" });
@@ -77,7 +79,13 @@ export default function AddFaqPopup({ doc, onSubmit }: AddFaqPopupProps) {
               <option value="Social"> Social </option>
             </select>
           </div>
-          <button type={"submit"}>Submit</button>
+          <button className="px-2 mt-4 text-sm text-gray-500" type={"submit"}>Submit</button>
+          <button
+          className="px-2 mt-4 text-sm text-gray-500"
+          onClick={onClose}
+        >
+          Close
+        </button>
         </form>
         
       </div>
