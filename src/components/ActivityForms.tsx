@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import Activity, { ActivityType } from "../types/Activity";
-import { Doc } from "../../firebaseAPI";
+import {useState} from 'react';
+import Activity, {ActivityType} from "../types/Activity";
+import {Doc} from "../../firebaseAPI";
+
 interface AddActivityPopupProps {
   doc: Doc<Activity>;
   onSubmit: (doc: Doc<Activity>) => void;
@@ -21,27 +22,23 @@ export default function AddActivityPopup({ doc, onSubmit, onClose }: AddActivity
       return ActivityType.Social;
     }
   }
-  const isValidActivity = (title: string, type: string, misc: string): [boolean, string | null] => {
+  const isValidActivity = (title: string, type: string): [boolean, string | null] => {
     if (title.trim() === '') {
       return [false, "Title cannot be empty"];
     }
-    if (misc.trim() === '') {
-      return [false, "Misc cannot be empty"];
-    }
-    if (type !== "Hike" && type !== "Social") {
+    if (type !== "Hike" && type !== "Social" && type !== "Weekend") {
       return [false, "Must select type"];
     }
     return [true, null];
   }
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const [isValid, err] = isValidActivity(title, type, misc);
+    const [isValid, err] = isValidActivity(title, type);
     setError(err);
     if (isValid) {
-      const newActivity: Activity = {
+      doc.data = {
         title, date: doc.data.date, type: convertType(type), misc
-      }
-      doc.data = newActivity;
+      };
       onSubmit(doc);
       onClose();
     }
@@ -77,6 +74,7 @@ export default function AddActivityPopup({ doc, onSubmit, onClose }: AddActivity
               <option value=""> --Select-- </option>
               <option value="Hike"> Hike </option>
               <option value="Social"> Social </option>
+              <option value="Weekend"> Weekend </option>
             </select>
           </div>
           <button className="px-2 mt-4 text-sm text-gray-500" type={"submit"}>Submit</button>

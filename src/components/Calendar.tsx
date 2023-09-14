@@ -24,6 +24,8 @@ function colourActivity(type: ActivityType): string {
       return "bg-green-200";
     case ActivityType.Social:
       return "bg-orange-200";
+    case ActivityType.Weekend:
+      return "bg-blue-200";
   }
 }
 

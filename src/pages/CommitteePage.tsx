@@ -1,18 +1,5 @@
-import { LoremIpsum } from "lorem-ipsum";
-
 import PageHeader from "../components/PageHeader";
 import PageFooter from "../components/PageFooter";
-
-const lorem = new LoremIpsum({
-  sentencesPerParagraph: {
-    max: 8,
-    min: 4
-  },
-  wordsPerSentence: {
-    max: 16,
-    min: 4
-  }
-});
 
 const people = [
   {
@@ -22,39 +9,29 @@ const people = [
   },
   {
     name: 'Michael Sellgren',
-    role: 'Deputy President',
+    role: 'Co-President',
+    image: 'committee/michael.jpeg'
+  },
+  {
+    name: 'Ethan Clark',
+    role: 'Treasurer, Deputy President Logistics',
     image: 'person.png'
   },
   {
-    name: lorem.generateWords(2),
-    role: lorem.generateWords(2),
-    image: 'person.png'
+    name: 'Chris O\'Sullivan',
+    role: 'Secretary, Deputy President Activities',
+    image: 'committee/chris.jpeg'
   },
   {
-    name: lorem.generateWords(2),
-    role: lorem.generateWords(2),
-    image: 'person.png'
+    name: 'Euan Turner',
+    role: 'Deputy President Communication',
+    image: 'committee/euan.jpeg'
   },
   {
-    name: lorem.generateWords(2),
-    role: lorem.generateWords(2),
+    name: 'Daniel Hesk',
+    role: 'Deputy President Competitions',
     image: 'person.png'
   },
-  {
-    name: lorem.generateWords(2),
-    role: lorem.generateWords(2),
-    image: 'person.png'
-  },
-  {
-    name: lorem.generateWords(2),
-    role: lorem.generateWords(2),
-    image: 'person.png'
-  },
-  {
-    name: lorem.generateWords(2),
-    role: lorem.generateWords(2),
-    image: 'person.png'
-  }
 ]
 
 export default function CommitteePage() {
@@ -66,7 +43,7 @@ export default function CommitteePage() {
           <div className="max-w-2xl">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Meet your committee</h2>
             <p className="mt-6 sm:text-lg leading-8 text-gray-600">
-              {lorem.generateParagraphs(1)}
+              {"Committee Description"}
             </p>
           </div>
           <ul role="list" className="grid gap-x-12 gap-y-8 sm:grid-cols-2 sm:gap-y-16 xl:col-span-2 ml-4">
