@@ -5,7 +5,7 @@ const people = [
   {
     name: 'James King',
     role: 'President',
-    image: 'person.png'
+    image: 'committee/james.jpeg'
   },
   {
     name: 'Michael Sellgren',
