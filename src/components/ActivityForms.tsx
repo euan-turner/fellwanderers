@@ -18,8 +18,10 @@ export default function AddActivityPopup({ doc, onSubmit, onClose }: AddActivity
   const convertType = (text: string) => {
     if (text === "Hike") {
       return ActivityType.Hike;
-    } else {
+    } else if (text === "Social"){
       return ActivityType.Social;
+    } else {
+      return ActivityType.Weekend;
     }
   }
   const isValidActivity = (title: string, type: string): [boolean, string | null] => {
