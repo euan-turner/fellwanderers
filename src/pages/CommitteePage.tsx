@@ -30,7 +30,7 @@ const people = [
   {
     name: 'Daniel Hesk',
     role: 'Deputy President Competitions',
-    image: 'person.png'
+    image: 'committee/daniel.jpeg'
   },
 ]
 
