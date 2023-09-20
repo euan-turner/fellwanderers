@@ -36,7 +36,7 @@ export default function PageFooter() {
     <div className={"w-screen h-20 px-0 sm:px-2"}>
       <div className={"bg-white pt-2 mb-4 shadow-md"}></div>
       <div className={"flex flex-row justify-center sm:justify-between items-center space-x-2 sm:space-x-5 px-1 sm:px-2"}>
-      { 
+        {
           showLoginPopup && 
           <LoginPopup onClose={handleLoginClose} />
         }

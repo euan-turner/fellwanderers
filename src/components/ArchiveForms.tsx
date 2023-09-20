@@ -42,6 +42,7 @@ export function AddArchiveForm({ onSubmit, isValidAdd, archiveDocs, setState}: A
       setTitle('');
       setDesc('');
       setSelectedFiles(null);
+      setRoute('');
     }
   }
   return (
@@ -153,6 +154,7 @@ export function EditArchiveForm({ onSubmit, isValidEdit, archiveDocs, setState}:
       setNewTitle('');
       setOldTitle('');
       setDesc('');
+      setRoute('');
     }
   }
 
