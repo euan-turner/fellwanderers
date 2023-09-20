@@ -86,7 +86,7 @@ function Description() {
         </h1>
         <p className="my-2 text-lg text-gray-600 text-center">
           If you're seeking a club that combines the thrill of hiking through stunning locations with the joy of forging meaningful connections, you've found your perfect match. Join us, and let's explore the wonders of the UK together, one step at a time.
-          At the Imperial College London Hiking Club, we're not just a club; we're a community of nature enthusiasts, adventurers, and friends. Get ready to leave the city behind, embark on unforgettable journeys, and create memories that will last a lifetime. Welcome to the adventure of a lifetime – welcome to the Imperial College London Hiking Club!
+          At Fellwanderers, we're not just a club; we're a community of nature enthusiasts, adventurers, and friends. Get ready to leave the city behind, embark on unforgettable journeys, and create memories that will last a lifetime. Welcome to Fellwanderers!
         </p>
       </div>
     </div>

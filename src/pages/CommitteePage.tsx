@@ -43,7 +43,8 @@ export default function CommitteePage() {
           <div className="max-w-2xl">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Meet your committee</h2>
             <p className="mt-6 sm:text-lg leading-8 text-gray-600">
-              {"Committee Description"}
+              We're here to assist and support you on your hiking adventures. Whether you're a seasoned hiker or new to the trail, our committee members are ready to help.
+              For any inquiries, ideas, or assistance, feel free to contact us at fellwa@ic.ac.uk or through the WhatsApp chat. Let's embark on unforgettable hiking experiences together!
             </p>
           </div>
           <ul role="list" className="grid gap-x-12 gap-y-8 sm:grid-cols-2 sm:gap-y-16 xl:col-span-2 ml-4">
