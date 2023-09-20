@@ -3,4 +3,5 @@ export default interface Archive {
   desc: string;
   directory: string;
   order: number;
+  route: string;
 }

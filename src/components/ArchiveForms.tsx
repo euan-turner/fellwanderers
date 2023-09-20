@@ -17,6 +17,7 @@ export function AddArchiveForm({ onSubmit, isValidAdd, archiveDocs, setState}: A
   const [desc, setDesc] = useState('');
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
   const [order, setOrder] = useState(0);
+  const [route, setRoute] = useState('')
   const [error, setError] = useState<string | null>(null);
 
   const folderName = () => `images/archive/${title}`;
@@ -31,7 +32,7 @@ export function AddArchiveForm({ onSubmit, isValidAdd, archiveDocs, setState}: A
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const archive: Archive = {
-      title, desc, directory: folderName(), order
+      title, desc, directory: folderName(), order, route
     };
     const [isValid, err] = isValidAdd(archive, selectedFiles);
     setError(err);
@@ -105,6 +106,16 @@ export function AddArchiveForm({ onSubmit, isValidAdd, archiveDocs, setState}: A
             />
           </label>
         </div>
+        <div>
+          <label className={"block mb-2"}>
+            {"Map Link: "}
+            <input
+              type="text"
+              value={route}
+              onChange={(e) => setRoute(e.target.value)}
+            />
+          </label>
+        </div>
         <button type="submit" className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border text-xs sm:text-sm font-semibold rounded-md no-underline hover:bg-green-900/60"}>Submit</button>
       </form>
     </div>
@@ -124,6 +135,7 @@ export function EditArchiveForm({ onSubmit, isValidEdit, archiveDocs, setState}:
   const [newTitle, setNewTitle] = useState('');
   const [oldTitle, setOldTitle] = useState('');
   const [desc, setDesc] = useState('');
+  const [route, setRoute] = useState('');
   const [error, setError] = useState<string | null>(null);
   // Work out how to edit images, will likely need to save as we go
 
@@ -131,7 +143,7 @@ export function EditArchiveForm({ onSubmit, isValidEdit, archiveDocs, setState}:
     e.preventDefault();
     const oldArchive = archiveDocs.filter((doc) => {return doc.data.title === oldTitle})[0];
     const newArchive: Archive= {
-      title: newTitle, desc, order, directory: oldArchive.data.directory
+      title: newTitle, desc, order, directory: oldArchive.data.directory, route
     }
     const [isValid, err] = isValidEdit(newArchive, order, archiveDocs);
     setError(err);
@@ -151,6 +163,7 @@ export function EditArchiveForm({ onSubmit, isValidEdit, archiveDocs, setState}:
     setNewTitle(title);
     setDesc(doc.data.desc);
     setOrder(doc.data.order);
+    setRoute(doc.data.route);
   }
   const handleOrderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setOrder(parseInt(e.target.value, 10));
@@ -208,6 +221,17 @@ export function EditArchiveForm({ onSubmit, isValidEdit, archiveDocs, setState}:
           ))
           }
         </select>
+          <div>
+            <label className={"block mb-2"}>
+              {"New Map Link: "}
+              <input
+                type="text"
+                value={route}
+                onChange={(e) => setRoute(e.target.value)}
+                required
+              />
+            </label>
+          </div>
       </div>
       <button type="submit" className={"shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border text-xs sm:text-sm font-semibold rounded-md no-underline hover:bg-green-900/60"}>Submit</button>
       </form>

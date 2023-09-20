@@ -1,5 +1,8 @@
 import ImageSlideshow from "./ImageSlideshow.tsx";
 import Archive from "../types/Archive.ts";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faMapLocationDot} from "@fortawesome/free-solid-svg-icons";
+import StyledLink from "./StyledLink.tsx";
 
 export default function HikeArchive(archive: Archive) {
   const style =
@@ -16,7 +19,20 @@ export default function HikeArchive(archive: Archive) {
             }
           >
             {archive.title}
+            {"\t"}
+            {archive.route !== "" && <StyledLink
+              href={archive.route}
+              className={
+                "shadow-md inline-block p-2 bg-logoGreen-light border-logoGreen-dark border font-semibold rounded-md no-underline hover:bg-green-900/60"
+              }
+              children={
+                <div>
+                  <FontAwesomeIcon icon={faMapLocationDot}/>
+                </div>
+              }
+            />}
           </h1>
+          
           <p className={"text-sm lg:text-base"}>{archive.desc}</p>
         </div>
         <div className={"flex-1 h-full"}>

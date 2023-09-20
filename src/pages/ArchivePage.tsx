@@ -253,6 +253,7 @@ export default function ArchivePage() {
               desc={data.desc}
               directory={data.directory}
               order={data.order}
+              route={data.route}
             />
           </div>
         ))}
