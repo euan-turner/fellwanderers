@@ -191,7 +191,7 @@ export default function FaqPage() {
         FAQs
       </h2>
       <p className={"w-full font-bold tracking-tight text-black px-4 lg:px-8 pt-2"}>
-        If you don't find the answers you need here, e-mail us at fellsoc@imperial.ac.uk
+        If you don't find the answers you need here, e-mail us at fellwa@ic.ac.uk
       </p>
       {
         isLoggedIn && 
