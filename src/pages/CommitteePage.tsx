@@ -15,7 +15,7 @@ const people = [
   {
     name: 'Ethan Clark',
     role: 'Treasurer, Deputy President Logistics',
-    image: 'person.png'
+    image: 'committee/ethan.jpeg'
   },
   {
     name: 'Chris O\'Sullivan',
