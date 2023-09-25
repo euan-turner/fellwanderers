@@ -25,10 +25,10 @@ function HeroSection() {
       }
       style={backgroundImageStyle}
     >
-      <div className={"w-full"}>
-        <h1 className={"text-4xl sm:text-6xl font-bold px-10"}>Fellwanderers</h1>
-        <h2 className={"text-2xl sm:text-4xl pl-10 pb-5"}>Imperial's Hiking Society</h2>
-        <div className={"flex flex-row justify-start space-x-5 px-10"}>
+      <div className={"w-full flex flex-col space-y-2 px-10"}>
+        <h1 className={"text-4xl sm:text-6xl font-bold"}>Fellwanderers</h1>
+        <h2 className={"text-2xl sm:text-4xl pb-5"}>Imperial's Hiking Society</h2>
+        <div className={"flex flex-row justify-start space-x-5"}>
           <StyledLink
             href={joinLink}
             className={
@@ -61,8 +61,8 @@ function HeroSection() {
 
 function Description() {
   return (
-    <div className="absolute inset-0 flex items-center justify-center">
-      <div className="bg-white bg-opacity-50 p-4 rounded-lg w-3/4">
+    <div className="flex items-center justify-center">
+      <div className="bg-gray-300 bg-opacity-50 p-4 rounded-lg w-7/8">
         <h1 className="text-xl font-semibold text-center text-gray-800">
           About Us
         </h1>
@@ -96,10 +96,8 @@ export default function HomePage() {
   return (
     <div>
       <PageHeader />
-      <div className={"relative"}>
-        <HeroSection />
-        <Description />
-      </div>
+      <HeroSection />
+      <Description />
       <PageFooter />
     </div>
   );
