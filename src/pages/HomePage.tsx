@@ -62,12 +62,13 @@ function HeroSection() {
 function Description() {
   return (
     <div className="flex items-center justify-center">
-      <div className="bg-gray-300 bg-opacity-50 p-4 rounded-lg w-7/8">
+      <div className="bg-gray-300 bg-opacity-50 p-4 rounded-lg w-2/3">
         <h1 className="text-xl font-semibold text-center text-gray-800">
           About Us
         </h1>
         <p className="my-2 text-lg text-gray-600 text-center">
           As the official hiking society for Imperial College London, we are your gateway to discovering the breathtaking landscapes and hidden gems of the United Kingdom. We will take you on unforgettable hiking experiences that encompass day hikes, thrilling weekend trips, and captivating tours across the UK.
+          We are also looking for experienced hikers to help out with leading these trips, so get in touch if you are interested.
         </p>
         <h1 className="text-xl font-semibold text-center text-gray-800">
           Explore Nature, Create Memories
