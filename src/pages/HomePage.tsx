@@ -99,8 +99,8 @@ function StickyDescription() {
       {descs.map((desc) => (
           <div className="relative">
             {/* Text Section */}
-            <div className="h-80 bg-gray-200">
-                <div className="h-full mx-auto w-1/3 p-4 flex flex-col justify-center">
+            <div className="h-fit bg-gray-200">
+                <div className="h-full mx-auto lg:w-1/3 p-4 flex flex-col justify-center">
                   <h1 className="text-xl font-semibold text-left text-gray-800">
                     {desc.title}
                   </h1>
