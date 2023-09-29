@@ -61,18 +61,18 @@ export function setCollectionState<T>(dataName: string, order: Order<T>, setColl
 }
 
 export function handleSaveChangesClick<T extends WithFieldValue<DocumentData>>(dataName: string, docsToAdd: Doc<T>[], docsToDelete: Doc<T>[]) {
+  docsToDelete.forEach(async ({data, id}) => {
+    if (id) {
+      await deleteDoc(doc(db, dataName, id));
+      console.log("Deleted: ", data);
+    }
+  });
   docsToAdd.forEach(async (docToAdd) => {
     if (docToAdd.id) {
       await setDoc(doc(db, dataName, docToAdd.id), docToAdd.data);
     } else {
       const docRef = await addDoc(collection(db, dataName), docToAdd.data);
       docToAdd.id = docRef.id;
-    }
-  });
-  docsToDelete.forEach(async ({data, id}) => {
-    if (id) {
-      await deleteDoc(doc(db, dataName, id));
-      console.log("Deleted: ", data);
     }
   });
   alert("Saved Changes");
