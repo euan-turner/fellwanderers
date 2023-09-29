@@ -139,7 +139,7 @@ export default function Calendar({ activities, setActivities }: CalendarProps) {
   }, [monthStart, activities]);
 
   return (
-    <div className={"container mx-auto lg:py-8"}>
+    <div className={"container mx-auto w-full lg:py-8"}>
       <div className={"flex justify-center items-center lg:mb-4"}>
         <button
           className={"bg-white hover:scale-y-110 py-2 px-4 rounded-lg"}
@@ -175,7 +175,7 @@ export default function Calendar({ activities, setActivities }: CalendarProps) {
             {monthActivities.map((doc, actIndex) => (
               <div
                 key={actIndex}
-                className={`${colourActivity(doc.data.type)} shadow-md p-1 lg:p-4 h-32 border border-slate-400`}
+                className={`${colourActivity(doc.data.type)} shadow-md p-1 lg:p-4 h-fit border border-slate-400`}
               >
                 <div className={"flex flex-row justify-between"}>
                   <h3 className={"text-sm lg:text-base text-gray-700"}>{tileDateFormat.format(doc.data.date)}</h3>
