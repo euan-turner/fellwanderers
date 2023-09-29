@@ -4,7 +4,7 @@ import {
   faArrowRight,
   faCircleInfo,
 } from "@fortawesome/free-solid-svg-icons";
-
+import { useEffect } from "react";
 import PageHeader from "../components/PageHeader";
 import PageFooter from "../components/PageFooter";
 import StyledLink from "../components/StyledLink.tsx";
@@ -122,6 +122,9 @@ function StickyDescription() {
 }
 
 export default function HomePage() {
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
   return (
     <div>
       <PageHeader />
