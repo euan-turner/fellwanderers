@@ -70,7 +70,7 @@ function StickyDescription() {
   const descs: Desc[] = [
     {
       title: "About Us",
-      para: "As the official hiking society for Imperial College London, we are your gateway to discovering the breathtaking landscapes and hidden gems of the United Kingdom. We will take you on unforgettable hiking experiences that encompass day hikes, thrilling weekend trips, and captivating tours across the UK. We are also looking for experienced hikers to help out with leading these trips, so get in touch if you are interested.",
+      para: "We are Fellwanderers, the hiking society for Imperial College London - your gateway to discovering the breathtaking landscapes and hidden gems of the United Kingdom. We will take you on unforgettable hiking experiences from day hikes, thrilling weekend trips, and captivating holiday tours across the UK. We are also looking for experienced hikers to help out with leading these trips, so get in touch if you are interested.",
       image: "hike_pics/punchbowl23.jpg",
       alt: "Devil's Punchbowl 2023"
     },
@@ -99,23 +99,21 @@ function StickyDescription() {
       {descs.map((desc) => (
           <div className="relative">
             {/* Text Section */}
-            <div className="h-80 bg-gray-300">
-              <div className="h-full p-4 flex flex-col justify-center">
-                <h1 className="text-xl font-semibold text-center text-gray-800">
-                  {desc.title}
-                </h1>
-                <p className="my-2 text-lg text-gray-600 text-center">
-                  {desc.para}
-                </p>
-              </div>
+            <div className="h-80 bg-gray-200">
+                <div className="h-full mx-auto w-1/3 p-4 flex flex-col justify-center">
+                  <h1 className="text-xl font-semibold text-left text-gray-800">
+                    {desc.title}
+                  </h1>
+                  <p className="my-2 text-lg text-gray-600 text-left">
+                    {desc.para}
+                  </p>
+                </div>
             </div>
             
             {/* Sticky Image */}
             <div className="top-0 h-screen">
               <img src={desc.image} alt={desc.alt} className="object-cover h-full w-full" />
             </div>
-          
-          
           </div>
       ))
       }
