@@ -12,6 +12,11 @@ export type Doc<T> = {
 }
 type SetCollection<T> = (value: React.SetStateAction<Doc<T>[]>) => void;
 
+/**
+ * Retrieves collection from Firestore, applying transform to each element
+ * @param collectionName
+ * @param transform
+ */
 async function retrieveCollection<T>(collectionName: string, transform: TransformFromFirestore<T>) {
   const querySnapshot = await getDocs(collection(db, collectionName));
   const collData: Doc<T>[] = [];
@@ -24,6 +29,11 @@ async function retrieveCollection<T>(collectionName: string, transform: Transfor
   return collData;
 }
 
+/**
+ * Retrieve collection from cache, applying transform to each element
+ * @param cacheName
+ * @param transform
+ */
 function getCachedCollection<T>(cacheName: string, transform: TransformForEach<T>) {
   const cachedData = localStorage.getItem(cacheName);
   if (cachedData) {
@@ -36,6 +46,14 @@ function getCachedCollection<T>(cacheName: string, transform: TransformForEach<T
   return null;
 }
 
+/**
+ * Fetch collection from Firestore into cache, ordering and updating React
+ * component's state
+ * @param dataName
+ * @param order
+ * @param setCollection
+ * @param transform
+ */
 async function fetchCollectionAndCache<T>(dataName: string, order: Order<T>, setCollection: SetCollection<T>, transform: TransformFromFirestore<T>) {
   retrieveCollection<T>(dataName, transform)
     .then((docs) => {
@@ -48,6 +66,14 @@ async function fetchCollectionAndCache<T>(dataName: string, order: Order<T>, set
     })
 }
 
+/**
+ * Update React component's collection state, fetching if needed
+ * @param dataName
+ * @param order
+ * @param setCollection
+ * @param transform
+ * @param firestoreTransform
+ */
 export function setCollectionState<T>(dataName: string, order: Order<T>, setCollection: SetCollection<T>, transform: TransformForEach<T>, firestoreTransform: TransformFromFirestore<T>) {
   const cachedCollection = getCachedCollection<T>(dataName, transform);
   if (cachedCollection) {
@@ -60,6 +86,12 @@ export function setCollectionState<T>(dataName: string, order: Order<T>, setColl
   }
 }
 
+/**
+ * Add and delete necessary docs from Firestore collection
+ * @param dataName
+ * @param docsToAdd
+ * @param docsToDelete
+ */
 export function handleSaveChangesClick<T extends WithFieldValue<DocumentData>>(dataName: string, docsToAdd: Doc<T>[], docsToDelete: Doc<T>[]) {
   docsToDelete.forEach(async ({data, id}) => {
     if (id) {
