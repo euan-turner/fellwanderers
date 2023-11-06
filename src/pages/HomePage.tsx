@@ -12,7 +12,7 @@ import StyledLink from "../components/StyledLink.tsx";
 const socLink =
   "https://www.imperialcollegeunion.org/activities/a-to-z/fellwanderers";
 const joinLink =
-  "https://www.imperialcollegeunion.org/shop/csp/fellwanderers/fellwanderers-imperial-hiking-society-membership-22-23";
+  "https://www.imperialcollegeunion.org/shop/csp/fellwanderers/fellwanderers-imperial-hiking-society-membership-23-24";
 
 function HeroSection() {
   const backgroundImageStyle = {

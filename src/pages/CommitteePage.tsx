@@ -32,6 +32,11 @@ const people = [
     role: 'Deputy President Competitions',
     image: 'committee/daniel.jpeg'
   },
+  {
+    name: 'Sydney Xie',
+    role: 'Deputy President Socials',
+    image: 'committee/sydney.jpeg'
+  }
 ]
 
 export default function CommitteePage() {
