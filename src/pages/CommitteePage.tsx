@@ -36,6 +36,11 @@ const people = [
     name: 'Sydney Xie',
     role: 'Deputy President Socials',
     image: 'committee/sydney.jpeg'
+  },
+  {
+    name: 'Felix Aubugeau-Williams',
+    role: 'Deputy President Tours',
+    image: 'committee/felix.jpeg'
   }
 ]
 
