@@ -3,13 +3,8 @@ import PageFooter from "../components/PageFooter";
 
 const people = [
   {
-    name: 'James King',
-    role: 'President',
-    image: 'committee/james.jpeg'
-  },
-  {
     name: 'Michael Sellgren',
-    role: 'Co-President',
+    role: 'President',
     image: 'committee/michael.jpeg'
   },
   {
