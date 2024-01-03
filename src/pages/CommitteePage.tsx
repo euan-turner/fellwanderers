@@ -8,6 +8,11 @@ const people = [
     image: 'committee/michael.jpeg'
   },
   {
+    name: 'Zong Junn Lee',
+    role: 'Co-President',
+    image: 'committee/zong.jpeg'
+  },
+  {
     name: 'Ethan Clark',
     role: 'Treasurer, Deputy President Logistics',
     image: 'committee/ethan.jpeg'
